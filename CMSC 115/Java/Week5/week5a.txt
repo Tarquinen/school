@@ -1,0 +1,51 @@
+Function Main
+    Declare Double counter
+    Declare Int counterNeg
+    Declare Int counterPos
+    Declare Double average
+    Declare Double num
+    While true 
+        Output "Enter an integer, the input ends if it is 0: "
+        Input num
+        Assign counter = counter + num
+        If num = 0 && counterNeg + counterPos = 0
+            Ouput "No numbers are entered except 0"
+            break
+        Else if num = 0
+            Assign average = counter / (counterNeg + counterPos)
+            Output "The number of positives is " + counterPos
+            Output "The number of negatives is " + counterNeg
+            Output "The total is " + counter
+            Output "The average is " + average
+            break
+        Else if num < 0
+            Assign counterNeg = counterNeg + 1
+        Else
+            counterPos = counterPos + 1
+
+
+Function Main
+    Declare String isbn
+    Declare Boolean invalid
+    Declare IntArray d[]
+    Assign d[] length 12
+    Output "Enter the first 12 digits of an ISBN-13 as a string: "
+    Input isbn
+    If isbn.length == 12
+        For int i = 0; i < 12; i++
+            If not Character.isDigit(isbn.charAt(i))
+                Ouput isbn + " is an invalid input"
+                Assign invalid = true
+                break
+            Assign d[i] = Integer.parseInt(isbn.substring(i, i + 1))
+    Else
+        Output isbn + " is an invalid input"
+        Assign invalid = true
+    If not invalid
+        Declare Int isbn13
+        Assign isbn13 = 10 - (d[0] + 3*d[1] + d[2] + 3*d[3] + d[4] + 3*d[5] + d[6] + 3*d[7] + d[8] + 3*d[9] + d[10] + 3*d[11]) % 10
+        If isbn13 = 10
+            isbn13 = 0
+        Declare String fullIsbn
+        Assign fullIsbn = isbn + isbn13
+        Output "The ISBN-13 number is " + fullIsbn

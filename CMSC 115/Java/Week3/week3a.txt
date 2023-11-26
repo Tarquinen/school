@@ -1,0 +1,48 @@
+//project 3
+Function main
+    Declare int month
+    Ouput "Enter a month in the year (e.g., 1 for Jan):"
+    Loop until break
+        Input month
+        if month > 0 and month <= 12
+            break
+        else
+            Output "Enter a value 1-12"
+    Declare monthName
+    monthName = monthToText(month)
+    Declare int year
+    Ouput "Enter a year: "
+    Loop until break
+        Input year
+        if year > 0
+            break
+        else
+            Output "Enter a positive int"
+    Declare boolean leap
+    leap = (year % 4 == 0) && ((year % 100 != 0) || (year % 400 == 0))
+    Declare int daysInInputMonth
+    daysInInputMonth = days_in_month(month, leap)
+    Ouput monthName + " " + year + " has " + daysInInputMonth + " days"
+
+Function days_in_month (int month, boolean leap)
+    if month = 1 or 3 or 5 or 7 or 8 or 10 or 12
+        return 31
+    else if month = 4 or 6 or 9 or 11
+        return 30
+    else if month = 2 and leap is true
+        return 29
+    else    
+        return 28
+
+
+//project 5
+Function main  
+    Declare double x
+    Declare doubly y
+    Output "Enter a point with two coordinates: "
+    Input x
+    Input y
+    if (x <= 5 && x >= -5 && y <= 2.5 && y >= -2.5)
+        Output "Point (" + x + ", " + y + ") is in the rectangle"
+    else
+        Ouput "Point (" + x + ", " + y + ") is not in the rectangle"

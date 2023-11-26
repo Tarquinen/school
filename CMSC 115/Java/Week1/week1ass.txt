@@ -1,0 +1,30 @@
+
+//project 1
+Function main
+    Output "Enter the subtotal and a gratuity rate:"
+    Declare double subtotal
+    Declare double gratuityRate
+    Input subtotal, gratuityRate
+    Declare double gratuity
+    Declare double total
+    Assign gratuity = subtotal * gratuityRate * .01
+    Assign total = subtotal + gratuity
+    Output "The gratuity is $" + gratuity + " and the total is $" + total
+End
+
+
+//project 5
+Function main
+    Declare double investmentAmount
+    Input investmentAmount
+    Declare double annualInterestRate
+    Input annualInterestRate
+    Declare double monthlyInterestRate
+    Assign monthlyInterestRate = annualInterestRate / 12
+    Assign monthlyInterestRate = monthlyInterestRate / 100
+    Declare double numberOfYears
+    Input numberOfYears
+    Declare double futureInvestmentValue 
+    Assign futureInvestmentValue = investmentAmount * (1 + monthlyInterestRate)^(numberOfYears * 12)
+    Output "Future value is $" + futureInvestmentValue
+End

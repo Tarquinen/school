@@ -1,0 +1,4 @@
+{
+    "java.debug.settings.onBuildFailureProceed": true,
+    "editor.inlineSuggest.showToolbar": "always"
+}

@@ -1,0 +1,40 @@
+//project 1
+Declare an array db of integers with size 101
+Declare a function main
+    Output "Enter the integers between 1 and 100: "
+    Declare int x
+    While true
+        Input x
+        If x equals 0
+            Break
+        increaseCount(x)
+    PrintCount(db)
+
+Declare a function increaseCount with parameter x
+    Increment db[x]
+
+Declare a function printCount with parameter db
+    For i from 0 to length of db
+        If db[i] equals 0
+            Continue
+        Else if db[i] is greater than 1
+            Output i + " occurs " + db[i] + " times"
+        Else
+            Output i + " occurs 1 time"
+
+//project 2
+Declare a function Main
+    Output "Enter list: "
+    Declare list as an array of integers with size input.nextInt()
+    For i from 0 to length of list
+        Assign list[i] with input.nextInt()
+    If isSorted(list) is true
+        Output "The list is already sorted"
+    Else
+        Output "The list is not sorted"
+
+Declare a function isSorted with parameter list
+    For i from 0 to length of list - 1
+        If list[i] is greater than list[i + 1]
+            Return false
+    Return true

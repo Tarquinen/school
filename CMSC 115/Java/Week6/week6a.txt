@@ -1,0 +1,29 @@
+//project 1
+Function Main
+    Declare long millis
+    Output "Enter time in milliseconds: "
+    Input millis
+    Output converMillis(millis)
+
+Function converMillis(millis)
+    Declare long seconds = millis / 1000
+    Declare long minutes = seconds / 60
+    Declare long hours = minutes / 60
+    Declare long currSeconds = seconds % 60
+    Declare long currMinutes = minutes % 60
+    Return hours + ":" + currMinutes + ":" + currSeconds
+
+
+
+//project 2
+Function Main
+    Declare int number = 0
+    Declare int width = 0
+    Output "Enter an Integer: "
+    Input number
+    Output "Enter a width: "
+    Input width
+    Output "The formatted number is " + format(number, width)
+
+Function format(number, width)
+    return ("%0" + width + "d", number)

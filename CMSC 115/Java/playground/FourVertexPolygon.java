@@ -14,8 +14,13 @@ public class FourVertexPolygon {
         System.out.println(allPoints[1][0] + ", " + allPoints[1][1]);
         System.out.println(allPoints[2][0] + ", " + allPoints[2][1]);
         System.out.println(allPoints[3][0] + ", " + allPoints[3][1]);
+<<<<<<< HEAD
 
         int[][] v1 
+=======
+    }
+
+>>>>>>> 293ab68939366520582805efac20e06788f17ade
 
     }
 

@@ -14,20 +14,18 @@ public class FourVertexPolygon {
         System.out.println(allPoints[1][0] + ", " + allPoints[1][1]);
         System.out.println(allPoints[2][0] + ", " + allPoints[2][1]);
         System.out.println(allPoints[3][0] + ", " + allPoints[3][1]);
-        String test = "test";
+
+        int[][] v1 
 
     }
 
-    // some comments here to test changes
-
-
-
-
-    public static int[] sortIndex(double[][] allPoints) {
-        int[] sortX = new int[4];
-        int[] sortY = new int[4];
+    public static int[][] sortIndex(double[][] allPoints) {
+        int[] sortX = new int[allPoints.length];
+        int[] sortY = new int[allPoints[0].length];
         int tempX;
+        int tempY;
         int[] xIndex = createIndexArray(allPoints);
+        int[] yIndex = createIndexArray(allPoints);
 
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 3 - i; j++) {
@@ -35,10 +33,15 @@ public class FourVertexPolygon {
                     tempX = xIndex[j];
                     xIndex[j] = xIndex[j + 1];
                     xIndex[j + 1] = tempX;
-                    
+                }
+                if (allPoints[j][1] > allPoints[j + 1][1]) {
+                    tempY = yIndex[j];
+                    yIndex[j] = yIndex[j + 1];
+                    yIndex[j + 1] = tempY;
                 }
             }
         }
+        return new int[][]{xIndex, yIndex};
     }
 
     public static int[] createIndexArray (double[][] allPoints) {

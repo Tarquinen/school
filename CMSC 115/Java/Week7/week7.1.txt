@@ -34,7 +34,7 @@ Output "Enter the coordinates of the cities: "
 For i from 0 to numCities
     Input cityCoordinates[i][0]
     Input cityCoordinates[i][1]
-    
+
 Declare double[] distancesOfEachCity
 Assign distancesOfEachCity to distancesToAllCities(cityCoordinates, numCities)
 Declare double[] centralCity
@@ -53,12 +53,9 @@ Function distancesToAllCities (double[][] cityCoordinates, int numCities)
         For j from 0 to numCities
             If i equals j then continue
             Add distanceToCity(cityCoordinates, i, j) to citySum
-        EndFor
         Assign allCitySums[i] to citySum
         Assign citySum to 0
-    EndFor
     Return allCitySums
-EndFunction
 
 Function distanceToCity (double[][] compareCities, int city1, int city2)
     Declare double xDiff
@@ -70,7 +67,6 @@ Function distanceToCity (double[][] compareCities, int city1, int city2)
     Declare double distance
     Assign distance to sqrt(xDiff^2 + yDiff^2)
     Return distance
-EndFunction
 
 Function minArrayValue (double[] distances)
     Declare double minValue
@@ -83,7 +79,4 @@ Function minArrayValue (double[] distances)
         If distances[i] is less than minValue then
             Assign minValue to distances[i]
             Assign minValueIndex to i
-        EndIf
-    EndFor
     Return new double array {minValue, minValueIndex}
-EndFunction

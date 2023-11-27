@@ -10,53 +10,44 @@ public class FourVertexPolygon {
         allPoints[2] = randomCoords(0, 10);
         allPoints[3] = randomCoords(0, 10);
 
-        System.out.println(allPoints[0][0] + ", " + allPoints[0][1]);
+        //allPoints[point #][x or y]
+        System.out.println(allPoints[0][0] + ", " + allPoints[0][1]); 
         System.out.println(allPoints[1][0] + ", " + allPoints[1][1]);
         System.out.println(allPoints[2][0] + ", " + allPoints[2][1]);
         System.out.println(allPoints[3][0] + ", " + allPoints[3][1]);
-<<<<<<< HEAD
 
-        int[][] v1 
-=======
+        sortArray(allPoints);
+        System.out.println("");
+        
+        System.out.println(allPoints[0][0] + ", " + allPoints[0][1]); 
+        System.out.println(allPoints[1][0] + ", " + allPoints[1][1]);
+        System.out.println(allPoints[2][0] + ", " + allPoints[2][1]);
+        System.out.println(allPoints[3][0] + ", " + allPoints[3][1]);
+        
+
     }
-
->>>>>>> 293ab68939366520582805efac20e06788f17ade
-
-    }
-
-    public static int[][] sortIndex(double[][] allPoints) {
+    //returns an array of the indices of the sorted x and y coordinates [xIndex, yIndex][1 - 4]
+    public static void sortArray(double[][] allPoints) {
         int[] sortX = new int[allPoints.length];
-        int[] sortY = new int[allPoints[0].length];
-        int tempX;
-        int tempY;
-        int[] xIndex = createIndexArray(allPoints);
-        int[] yIndex = createIndexArray(allPoints);
+        int[] sortY = new int[allPoints.length];
+        double tempX;
+        double tempY;
 
+        
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 3 - i; j++) {
-                if (allPoints[j][0] > allPoints[j + 1][0]) {
-                    tempX = xIndex[j];
-                    xIndex[j] = xIndex[j + 1];
-                    xIndex[j + 1] = tempX;
-                }
-                if (allPoints[j][1] > allPoints[j + 1][1]) {
-                    tempY = yIndex[j];
-                    yIndex[j] = yIndex[j + 1];
-                    yIndex[j + 1] = tempY;
+                if (allPoints[j][0] > allPoints[j + 1][0]) { // sort in increasing order
+                    tempX = allPoints[j][0];
+                    tempY = allPoints[j][1];
+                    allPoints[j][0] = allPoints[j + 1][0];
+                    allPoints[j][1] = allPoints[j + 1][0];
+                    allPoints[j + 1][0] = tempX;
+                    allPoints[j + 1][1] = tempY;
                 }
             }
         }
-        return new int[][]{xIndex, yIndex};
+        //return new int[][]{xIndex, yIndex};
     }
-
-    public static int[] createIndexArray (double[][] allPoints) {
-        int[] indexArray = new int[allPoints.length];
-        for (int i = 0; i < allPoints.length; i++) {
-            indexArray[i] = i;
-        }
-        return indexArray;
-    }
-
 
     public static double[] randomCoords (double min, double max) { 
         double rand1 = Math.random() * (max - min) + min;

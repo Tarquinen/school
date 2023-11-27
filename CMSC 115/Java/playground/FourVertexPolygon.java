@@ -28,8 +28,6 @@ public class FourVertexPolygon {
     }
     //returns an array of the indices of the sorted x and y coordinates [xIndex, yIndex][1 - 4]
     public static void sortArray(double[][] allPoints) {
-        int[] sortX = new int[allPoints.length];
-        int[] sortY = new int[allPoints.length];
         double tempX;
         double tempY;
 

@@ -62,4 +62,6 @@ public class Exercise08_21 {
         }
         return new double[]{minValue, minValueIndex};
     }
+
+    
 }

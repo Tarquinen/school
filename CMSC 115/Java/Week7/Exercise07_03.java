@@ -4,7 +4,7 @@ import java.util.Scanner;
 public class Exercise07_03 {
     static int[] db = new int[101];
 
-    public static void main () {
+    public static void main (String[] args) {
         System.out.println("Enter the integers between 1 and 100: ");
         Scanner input = new Scanner(System.in);
         int x;

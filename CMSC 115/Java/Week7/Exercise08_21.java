@@ -28,16 +28,13 @@ public class Exercise08_21 {
     }
 
     public static double[] distancesToAllCities (double[][] cityCoordinates, int numCities) {
-        double citySum = 0;
         double[] allCitySums = new double[numCities];
         for (int i = 0; i < numCities; i++) {
             for (int j = 0; j < numCities; j++) {
                 if (i == j)
                     continue;
-                citySum += distanceToCity(cityCoordinates, i, j);
+                allCitySums[i] += distanceToCity(cityCoordinates, i, j);
             }
-            allCitySums[i] = citySum;
-            citySum = 0;
         }
         return allCitySums;
     }
@@ -62,6 +59,4 @@ public class Exercise08_21 {
         }
         return new double[]{minValue, minValueIndex};
     }
-
-    
 }

@@ -51,7 +51,8 @@ Function distancesToAllCities (double[][] cityCoordinates, int numCities)
     Declare double[] allCitySums
     For i from 0 to numCities
         For j from 0 to numCities
-            If i equals j then continue
+            If i equals j
+                continue
             Add distanceToCity(cityCoordinates, i, j) to citySum
         Assign allCitySums[i] to citySum
         Assign citySum to 0
@@ -60,10 +61,8 @@ Function distancesToAllCities (double[][] cityCoordinates, int numCities)
 Function distanceToCity (double[][] compareCities, int city1, int city2)
     Declare double xDiff
     Assign xDiff to absolute value of (compareCities[city1][0] - compareCities[city2][0])
-    
     Declare double yDiff
     Assign yDiff to absolute value of (compareCities[city1][1] - compareCities[city2][1])
-
     Declare double distance
     Assign distance to sqrt(xDiff^2 + yDiff^2)
     Return distance

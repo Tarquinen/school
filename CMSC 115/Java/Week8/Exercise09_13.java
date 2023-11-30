@@ -18,6 +18,7 @@ public class Exercise09_13 {
         System.out.println("The largest element is " + myLocation.maxValue + ", located at ("
         + myLocation.row + ", " + myLocation.column + ")");
         
+        input.close();
     }
 
     public static Location locateLargest(double[][] a) {

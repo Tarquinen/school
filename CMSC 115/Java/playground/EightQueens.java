@@ -12,7 +12,7 @@ import java.util.ArrayList;
 
 public class EightQueens {
     
-    static int boardSize = 15; // change this value to change board size
+    static int boardSize = 14; // change this value to change board size
     static int [][] queens = new int[boardSize][boardSize]; //set the size of the chess board [x][y]
     static int[][] queenCoords = new int[queens.length + 1][2];
     static int xLength = queens.length;

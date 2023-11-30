@@ -1,0 +1,81 @@
+//project 1
+Function main
+    Output "Enter the number of rows and columns of the array: "
+    Input numRows
+    Input numCols
+    Output "Enter the array:"
+    Declare double[][] userInput with size numRows x numCols
+    For rows from 0 to numRows
+        For cols from 0 to numCols
+            Input userInput[rows][cols]
+    Declare int[] largestLocation and Assign locateLargest(userInput)
+    Output "The location of the largest element is at (" + largestLocation[0] + ", " + largestLocation[1] + ")"
+
+Function locateLargest with parameter double[][] a
+    Declare int rowLength and Assign a.length
+    Declare int colLength and Assign a[0].length
+    Declare double largestElement and Assign a[0][0]
+    Declare int[] largestElementIndex and Assign {0, 0}
+
+    For rows from 0 to rowLength
+        For cols from 0 to colLength
+            If largestElement < a[rows][cols]
+                Assign largestElement with a[rows][cols]
+                Assign largestElementIndex[0] with rows
+                Assign largestElementIndex[1] with cols
+    Return largestElementIndex
+
+//project 2
+Declare int numCities
+Output "Enter the number of cities: "
+Input numCities
+Declare double[][] cityCoordinates
+Output "Enter the coordinates of the cities: "
+For i from 0 to numCities
+    Input cityCoordinates[i][0]
+    Input cityCoordinates[i][1]
+
+Declare double[] distancesOfEachCity
+Assign distancesOfEachCity to distancesToAllCities(cityCoordinates, numCities)
+Declare double[] centralCity
+Assign centralCity to minArrayValue(distancesOfEachCity)
+Declare double centralCityTotalDistance
+Assign centralCityTotalDistance to centralCity[0]
+Declare int centralCityIndex
+Assign centralCityIndex to (int)centralCity[1]
+Output "The central city is at (" + cityCoordinates[centralCityIndex][0] + ", " + cityCoordinates[centralCityIndex][1] + ")"
+Output "The total distance to all other cities is " + centralCityTotalDistance
+
+Function distancesToAllCities (double[][] cityCoordinates, int numCities)
+    Declare double citySum
+    Declare double[] allCitySums
+    For i from 0 to numCities
+        For j from 0 to numCities
+            If i equals j
+                continue
+            Add distanceToCity(cityCoordinates, i, j) to citySum
+        Assign allCitySums[i] to citySum
+        Assign citySum to 0
+    Return allCitySums
+
+Function distanceToCity (double[][] compareCities, int city1, int city2)
+    Declare double xDiff
+    Assign xDiff to absolute value of (compareCities[city1][0] - compareCities[city2][0])
+    Declare double yDiff
+    Assign yDiff to absolute value of (compareCities[city1][1] - compareCities[city2][1])
+    Declare double distance
+    Assign distance to sqrt(xDiff^2 + yDiff^2)
+    Return distance
+
+Function minArrayValue (double[] distances)
+    Declare double minValue
+    Assign minValue to distances[0]
+    
+    Declare int minValueIndex
+    Assign minValueIndex to 0
+    
+    For i from 0 to distances.length
+        If distances[i] is less than minValue then
+            Assign minValue to distances[i]
+            Assign minValueIndex to i
+    Return new double array {minValue, minValueIndex}

@@ -27,7 +27,7 @@ Declare a function Main
     Output "Enter list: "
     Declare list as an array of integers with size input.nextInt()
     For i from 0 to length of list
-        Assign list[i] with input.nextInt()
+        Input list[i]
     If isSorted(list) is true
         Output "The list is already sorted"
     Else

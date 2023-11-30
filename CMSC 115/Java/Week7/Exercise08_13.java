@@ -5,8 +5,10 @@ public class Exercise08_13 {
     public static void main (String[] args) {
         Scanner input = new Scanner(System.in);
         System.out.print("Enter the number of rows and columns of the array: ");
+
         int numRows = input.nextInt();
         int numCols = input.nextInt();
+
         System.out.println("Enter the array:");
 
         double[][] userInput = new double[numRows][numCols];
@@ -21,6 +23,7 @@ public class Exercise08_13 {
         input.close();
     }
 
+    //returns the index of the largest element in a 2D array
     public static int[] locateLargest(double[][] a) {
         int rowLength = a.length;
         int colLength = a[0].length;

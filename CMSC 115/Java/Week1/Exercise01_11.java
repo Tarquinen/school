@@ -1,6 +1,6 @@
 package Week1;
 public class Exercise01_11 {
-    public void main() {
+    public void main(String[] args) {
         int worldPopulation = 312032486;
         System.out.println(worldPopulation);
         System.out.println("Population after 1 year: " + math(worldPopulation, 1));
@@ -25,3 +25,4 @@ public class Exercise01_11 {
         return newPop;
     }
 }
+

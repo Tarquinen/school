@@ -142,7 +142,7 @@ public class EightQueens {
 
         int xStart = Math.max(0, x - (yLength - 1 - y));
         int yStart = Math.min(x + y, yLength - 1);
-        for (int i = 0; (yStart - i >=0) && (xStart + i < xLength); i++) {
+        for (int i = 0; (yStart - i >= 0) && (xStart + i < xLength); i++) {
             if (queens[xStart + i][yStart - i] == 1) {
                 return true;
             }

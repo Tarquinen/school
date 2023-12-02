@@ -6,13 +6,14 @@ public class Exercise09_10 {
         System.out.println(quad.getDescriminant());
         System.out.println(quad.getRoot1());
         System.out.println(quad.getRoot2());
+
     }
 }
 
 class QuadraticEquation {
-    double a;
-    double b;
-    double c;
+    private double a;
+    private double b;
+    private double c;
 
     QuadraticEquation(double a, double b, double c) {
         this.a = a;

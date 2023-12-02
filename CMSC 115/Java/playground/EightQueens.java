@@ -12,7 +12,7 @@ import java.util.ArrayList;
 
 public class EightQueens {
     
-    static int boardSize = 14; // change this value to change board size
+    static int boardSize = 8; // change this value to change board size
     static int [][] queens = new int[boardSize][boardSize]; //set the size of the chess board [x][y]
     static int[][] queenCoords = new int[queens.length + 1][2];
     static int xLength = queens.length;
@@ -30,8 +30,9 @@ public class EightQueens {
             removeLastQueen(queens);
             lastQueen = lastQueenCoord(queens);
             placeQueen(queens, lastQueen, desiredQueens);
+            //System.out.println("\nThe last queen was placed at array indeces [x, y]: " + lastQueenCoord(queens)[0] + ", " + lastQueenCoord(queens)[1]);
         }
-        
+
         System.out.println("\nThere are " + solutions.size() + " total solutions");
         long endTime = System.nanoTime();
         System.out.println("milliseconds taken to calculate: " + (endTime-startTime)/1000000);
@@ -58,7 +59,7 @@ public class EightQueens {
 
                     if (numQueens == desiredQueens) {
                         System.out.println("\nSOLUTION FOUND, took " + attemptCounter + " tries. Total solutions: " + (solutions.size() + 1));
-                        //printBoard(queens);
+                        printBoard(queens);
                         int[][] queenCoordsCopy = new int[queenCoords.length][];
                         for (int i = 0; i < queenCoords.length; i++) {
                             queenCoordsCopy[i] = queenCoords[i].clone();
@@ -87,7 +88,8 @@ public class EightQueens {
         }
     }
 
-
+    //returns the coordinates of the last queen placed on the board
+    //in a single dimensional array, [x, y]
     public static int[] lastQueenCoord (int[][] queens) {
         for (int y = yLength - 1; y >= 0; y--) {
             for (int x = xLength - 1; x >= 0; x--) {
@@ -96,7 +98,7 @@ public class EightQueens {
                 }
             }
         }
-        return null;
+        return new int []{0, 0};
     }
     
     public static void removeLastQueen (int[][] queens) {
@@ -171,6 +173,8 @@ public class EightQueens {
         }
     }
 
+    //the following method creates a 2d demonstration of a chess board 
+    //using a multidimensional array input
     public static void printBoard (int[][] array) {
         for (int y = yLength - 1; y >= 0; y--) {
             System.out.print(String.format("%-2d", y + 1) + "|");

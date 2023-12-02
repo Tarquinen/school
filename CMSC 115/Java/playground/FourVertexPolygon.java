@@ -1,5 +1,6 @@
 package playground;
 //trash file
+/*
 public class FourVertexPolygon {
 
     public static void main (String[] args) {
@@ -45,3 +46,4 @@ public class FourVertexPolygon {
         return new double[]{rand1, rand2};
     }
 }
+*/

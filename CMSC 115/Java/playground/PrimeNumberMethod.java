@@ -2,14 +2,14 @@ package playground;
 
 public class PrimeNumberMethod {
     public static void main(String[] args) {
-        System.out.println("The first 50,000 prime numbers are \n");
-        printPrimeNumbers(500);
+        System.out.println("The first 50,000 prime numbers are");
+        printPrimeNumbers(5000);
     }
 
     public static void printPrimeNumbers(int numberOfPrimes) {
         final int NUMBER_OF_PRIMES_PER_LINE = 10;; // Display 10 per line
         int count = 0; // Count the number of prime numbers
-        int number = 1000000000; // A number to be tested for primeness
+        int number = 2000000000; // A number to be tested for primeness
 
         // Repeatedly find prime numbers
         while (count < numberOfPrimes) {

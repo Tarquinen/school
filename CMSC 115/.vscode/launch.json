@@ -6,6 +6,20 @@
     "configurations": [
         {
             "type": "java",
+            "name": "EightQueens",
+            "request": "launch",
+            "mainClass": "playground.EightQueens",
+            "projectName": "CMSC 115_fa8b2ae3"
+        },
+        {
+            "type": "java",
+            "name": "PrimeNumberMethod",
+            "request": "launch",
+            "mainClass": "playground.PrimeNumberMethod",
+            "projectName": "CMSC 115_fa8b2ae3"
+        },
+        {
+            "type": "java",
             "name": "Current File",
             "request": "launch",
             "mainClass": "${file}"

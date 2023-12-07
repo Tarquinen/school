@@ -1,14 +1,16 @@
+//https://adventofcode.com/2023/day/1
+
 package adventOfCode;
 import java.io.*;
 import java.util.ArrayList;
 
 public class day1 {
     public static void main(String[] args) throws Exception{
-        BufferedReader file2 = new BufferedReader(new FileReader(
+        BufferedReader file = new BufferedReader(new FileReader(
             "C:\\Users\\danny\\OneDrive\\Desktop\\Algo\\School-repo\\CMSC 115\\Java\\adventOfCode\\day1.txt"));
 
-        //part1(file2);
-        part2(file2);
+        //part1(file);
+        part2(file);
     }
 
     public static void part1 (BufferedReader file) throws Exception {
@@ -53,7 +55,7 @@ public class day1 {
                     continue;
                 }
                 boolean wordFound = false;
-                for (int dictIndex = 0; dictIndex < 10; dictIndex ++) { //check the char against dict, if it matches check more following chars
+                for (int dictIndex = 0; dictIndex < dict.length; dictIndex ++) { //check the char against dict, if it matches check more following chars
                     if (wordFound)
                         break;
                     int wordLength = dict[dictIndex].length();
@@ -61,7 +63,7 @@ public class day1 {
                     for (int extraLetters = 0; extraLetters < wordLength; extraLetters++) {
                         if (chars + extraLetters >= fileList.get(rows).length()) // stop checking for matches when you get to the end of a row
                             break;
-                        if (fileList.get(rows).charAt(chars + extraLetters) != dict[dictIndex].charAt(extraLetters)) {//first letter doesn't match so check against next dict item
+                        if (fileList.get(rows).charAt(chars + extraLetters) != dict[dictIndex].charAt(extraLetters)) {//letter doesn't match so check against next dict item
                             break;
                         }
                         else if (fileList.get(rows).charAt(chars + extraLetters) == dict[dictIndex].charAt(extraLetters)) {//letters match a dictionary element
@@ -95,7 +97,7 @@ public class day1 {
             int rowTotal = Integer.parseInt(strTotal);
             total += rowTotal;
             rowCounter ++; 
-            System.out.println("row: " + rowCounter + " number: " + rowTotal);
+            System.out.println("row: " + rowCounter + " number: " + rowTotal + " (" + value + ")");
         }
 
         System.out.println("TOTAL: " + total);

@@ -6,6 +6,27 @@
     "configurations": [
         {
             "type": "java",
+            "name": "day3",
+            "request": "launch",
+            "mainClass": "adventOfCode.day3",
+            "projectName": "CMSC 115_fa8b2ae3"
+        },
+        {
+            "type": "java",
+            "name": "day2",
+            "request": "launch",
+            "mainClass": "adventOfCode.day2",
+            "projectName": "CMSC 115_fa8b2ae3"
+        },
+        {
+            "type": "java",
+            "name": "day1",
+            "request": "launch",
+            "mainClass": "adventOfCode.day1",
+            "projectName": "CMSC 115_fa8b2ae3"
+        },
+        {
+            "type": "java",
             "name": "EightQueens",
             "request": "launch",
             "mainClass": "playground.EightQueens",

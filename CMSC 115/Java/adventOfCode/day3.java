@@ -22,51 +22,61 @@ public class day3 {
             fList.add(line);
         }
         int strLength = fList.get(0).length();
+        int totalSum = 0;
 
         for (int i = 0; i < fList.size(); i++) {
             String str = fList.get(i);
-
             int[] numCoord = new int[2]; //[number start index][number end index]
+            numCoord[0] = -1;
+
             for (int j = 0; j < strLength; j++) {
                 if (Character.isDigit(str.charAt(j))) {
-                    if (numCoord[0] == 0) {
+                    numCoord[1] = j;
+                    if (numCoord[0] == -1) {
                         numCoord[0] = j;
                     }
                     else {
                         numCoord[1] = j;
                     }
                 }
-                if (j == numCoord[1] + 1) { // number ended on prev character
+                boolean symbolNear = false;
+                boolean finishedNumber = false;
+                if (j == numCoord[1] + 1 || numCoord[1] == strLength - 1) { // number ended on prev character
+                    finishedNumber = true;
                     //check all coords around the number
-                    
-
+                    //System.out.println("past the number now " + numCoord[1]);
+                    for (int k = -1; k < 2; k++) {
+                        if (symbolNear)
+                            break;
+                        for (int l = 0; l < (numCoord[1] - numCoord[0] + 3); l++) {
+                            if (symbolNear)
+                                break;
+                            try {
+                                if (isSymbol(fList.get(i + k).charAt(numCoord[0] + l - 1))) {//check all the characters in a box around the number coords
+                                    symbolNear = true;
+                                }
+                            }
+                            catch (IndexOutOfBoundsException e) {
+                            }
+                        }
+                    }
                 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-                // System.out.println("j start : " + j);
-                // int k;
-                // for (k = 0; Character.isDigit(str.charAt(j + k)); k ++) {
-                //     numCoord[0] = j;
-                //     numCoord[1] = j + k;
-                //     System.out.println("found number");
-                // }
-                // System.out.println(Arrays.toString(numCoord) + " current coord: " + i + ", " + j);
-                // if (k > 0) 
-                //     j += k-1;
-                // //System.out.println("k here: " + k);
-                // System.out.println("j here: " + j);
+                if (symbolNear) {
+                    int coordValue = Integer.parseInt(str.substring(numCoord[0], numCoord[1] + 1));
+                    System.out.println(coordValue);
+                    totalSum += coordValue;
+                }
+                if (finishedNumber) {
+                    numCoord[0] = -1;
+                }
             }
         }
+        System.out.println("TOTAL: " + totalSum);
+    }
+
+    public static boolean isSymbol (char c) {
+        if (!Character.isDigit(c) && c != '.')
+            return true;
+        return false;
     }
 }

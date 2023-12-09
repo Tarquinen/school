@@ -11,7 +11,8 @@ public class day3 {
     public static void main(String[] args) throws Exception {
         BufferedReader file = new BufferedReader(new FileReader(
             "C:\\Users\\danny\\OneDrive\\Desktop\\Algo\\School-repo\\CMSC 115\\Java\\adventOfCode\\day3.txt"));
-        part1(file);
+        // part1(file);
+        part2(file);
     }
 
     public static void part1 (BufferedReader f) throws Exception {
@@ -72,6 +73,61 @@ public class day3 {
             }
         }
         System.out.println("TOTAL: " + totalSum);
+    }
+    public static void part2 (BufferedReader f) throws Exception {
+        ArrayList<String> fList = new ArrayList<String>();
+        String line;
+        while ((line = f.readLine()) != null)
+            fList.add(line);
+        int strLength = fList.get(0).length();
+        int totalRatio = 0;
+        for (int i = 0; i < fList.size(); i++) {
+            String str = fList.get(i);
+            for (int j = 0; j < strLength; j++) {
+                if (str.charAt(j) == '*') {
+                    int numFound = 0;
+                    int[][] coordStore = new int[2][3]; //{number counter}{coords}
+                    boolean legal = true;
+                    for (int k = -1; k < 2; k++) {
+                        for(int l = -1; l < 2; l++) {
+                            try {
+                                if (Character.isDigit(fList.get(i + k).charAt(j + l))) {
+                                    //get number
+                                    int[] coords = {i + k, j + l, j + l}; //{row #}{first number coordinate}{last number coordinate}
+                                    try {
+                                        for (int back = -1; Character.isDigit(fList.get(i + k).charAt(j + l + back)); back--) {
+                                            coords[1] = j + l + back;
+                                        }
+                                    }
+                                    catch (IndexOutOfBoundsException e) {}   
+                                    int forw = 1;
+                                    try {
+                                        for (forw = 1; Character.isDigit(fList.get(i + k).charAt(j + l + forw)); forw++) {
+                                            coords[2] = j + l + forw;
+                                        }
+                                    }
+                                    catch (IndexOutOfBoundsException e) {} 
+                                    l += forw - 1;
+                                    coordStore[numFound] = coords;
+                                    numFound ++;
+                                }
+                            }
+                            catch (IndexOutOfBoundsException e) {}
+                        }
+                    }
+                    if (numFound == 2) {
+                        String s1 = fList.get(coordStore[0][0]);
+                        String s2 = fList.get(coordStore[1][0]);
+                        int num1 = Integer.parseInt(s1.substring(coordStore[0][1], coordStore[0][2] + 1));
+                        int num2 = Integer.parseInt(s2.substring(coordStore[1][1], coordStore[1][2] + 1));
+                        System.out.println("found * at i, j: (" + i + ", " + j + "), 2 nearby numbers are: " + num1 + ", " + num2);
+                        int ratio = num1 * num2;
+                        totalRatio += ratio;
+                    }
+                }
+            }
+        }
+        System.out.println("total ratio: " + totalRatio);
     }
 
     public static boolean isSymbol (char c) {

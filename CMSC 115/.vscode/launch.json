@@ -6,6 +6,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "day9",
+            "request": "launch",
+            "mainClass": "adventOfCode.day9",
+            "projectName": "CMSC 115_fa8b2ae3"
+        },
+        {
+            "type": "java",
             "name": "day3",
             "request": "launch",
             "mainClass": "adventOfCode.day3",

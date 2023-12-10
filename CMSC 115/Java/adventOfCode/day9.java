@@ -6,13 +6,12 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.ArrayList;
 
-
 public class day9 {
     public static void main (String[] args) throws Exception {
         BufferedReader file = new BufferedReader(new FileReader(
             "C:\\Users\\danny\\OneDrive\\Desktop\\Algo\\School-repo\\CMSC 115\\Java\\adventOfCode\\day9.txt"));
-        //part1(file);
-        part2(file);
+        part1(file);
+        //part2(file);
     }
     
     public static void part1 (BufferedReader f) throws Exception {
@@ -115,7 +114,7 @@ public class day9 {
                 bigList.add(new ArrayList<>(in));
                 numCounter--;
             }
-            bigList.get(bigList.size() - 1).add(0, 0); // add another 0 to last row in tree
+            bigList.get(bigList.size() - 1).add(0, 0); // add another 0 to last row in tree at start of row
             for (int l = bigList.size() - 1; l > 0; l--) {
                 int firstVal = bigList.get(l).get(0);
                 int firstValRowUp = bigList.get(l - 1).get(0);

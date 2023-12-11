@@ -1,3 +1,5 @@
+// https://adventofcode.com/2023/day/10
+
 package adventOfCode;
 
 import java.io.BufferedReader;
@@ -18,14 +20,14 @@ public class day10 {
         String line;
         while ((line = f.readLine()) != null)
             fList.add(line);
-        int[] sLoc = new int[2]; //mouse starting location {row #, col #}
-        for (int rows = 0; rows < fList.size(); rows++) {
+        int[] mouseLoc = new int[2]; //mouse starting location {row #, col #}
+        for (int rows = 0; rows < fList.size(); rows++) { // find the mouse
             String row = fList.get(rows);
             int rowLen = row.length();
             for (int cols = 0; cols < rowLen; cols ++) {
                 if (row.charAt(cols) == 'S') {
-                    sLoc[0] = rows;
-                    sLoc[1] = cols;
+                    mouseLoc[0] = rows;
+                    mouseLoc[1] = cols;
                 }
             }
         }
@@ -37,11 +39,20 @@ public class day10 {
         char lastMovedDir = ' ';
         int rowLen = fList.get(0).length();
         int colLen = fList.size();
-        int[] searchStart = Arrays.copyOf(sLoc, 2); //{row #, Col #}
+        int[] searchStart = Arrays.copyOf(mouseLoc, 2); //{row #, Col #}
+        char[][] pipeRoute = new char[colLen][rowLen];
+
+        for (int rows = 0; rows < fList.size(); rows++) { // initial pipe chart population
+            for (int cols = 0; cols < rowLen; cols ++) {
+                pipeRoute[rows][cols] = '.';
+            }
+        }
+
+        pipeRoute[mouseLoc[0]][mouseLoc[1]] = 'S'; // place mouse in pipe chart
+
         int steps = 0;
         while (!startingPoint) {
             steps ++;
-            // System.out.println("search start: " + Arrays.toString(searchStart) + " last movement: " + lastMovedDir);
             if (searchStart[1] == 0) {
                 canGoLeft = false;
             }
@@ -56,40 +67,125 @@ public class day10 {
             }
             if (canGoLeft && lastMovedDir != 'R' && legalPipe(searchStart, 'L', fList)) {
                 searchStart[1] --;
-                // System.out.println("next coord left, char: " + fList.get(searchStart[0]).charAt(searchStart[1]));
                 lastMovedDir = 'L';
+                pipeRoute[searchStart[0]][searchStart[1]] = fList.get(searchStart[0]).charAt(searchStart[1]);
             }
             else if (canGoRight && lastMovedDir != 'L' && legalPipe(searchStart, 'R', fList)) {
                 searchStart[1] ++;
-                // System.out.println("next coord right, char: " + fList.get(searchStart[0]).charAt(searchStart[1]));
                 lastMovedDir = 'R';
+                pipeRoute[searchStart[0]][searchStart[1]] = fList.get(searchStart[0]).charAt(searchStart[1]);
             }
             else if (CanGoUp && lastMovedDir != 'D' && legalPipe(searchStart, 'U', fList)) {
                 searchStart[0] --;
-                // System.out.println("next coord up, char: " + fList.get(searchStart[0]).charAt(searchStart[1]));
                 lastMovedDir = 'U';
+                pipeRoute[searchStart[0]][searchStart[1]] = fList.get(searchStart[0]).charAt(searchStart[1]);
             }
             else if (canGoDown && lastMovedDir != 'U' && legalPipe(searchStart, 'D', fList)) {
                 searchStart[0] ++;
-                // System.out.println("next coord down, char: " + fList.get(searchStart[0]).charAt(searchStart[1]));
                 lastMovedDir = 'D';
+                pipeRoute[searchStart[0]][searchStart[1]] = fList.get(searchStart[0]).charAt(searchStart[1]);
             }
             else {
                 startingPoint = true;
             }
-            // System.out.println("search moved to: " + Arrays.toString(searchStart) + " steps taken: " + steps + "\n");
-            System.out.println("Step #: " + steps + ", checked pipe in the " + lastMovedDir + " direction, current pipe ("
-                + searchStart[0] + ", " + searchStart[1] + "): " + fList.get(searchStart[0]).charAt(searchStart[1]));
-            // System.out.println("S start location: " + Arrays.toString(sLoc));
-            // if (searchStart == sLoc || steps == 20) {
-            //     startingPoint = true;
-            // }
+            // System.out.println("Step #: " + steps + ", checked pipe in the " + lastMovedDir + " direction, current pipe ("
+            //     + searchStart[0] + ", " + searchStart[1] + "): " + fList.get(searchStart[0]).charAt(searchStart[1]));
             canGoLeft = true;
             canGoRight = true;
             canGoDown = true;
             CanGoUp = true;
         }
-        System.out.println("The furthest point a mouse can be is " + steps/2 + " steps away.");
+
+        // cursed part2
+        int pipeOutsideLoop = 0;
+        for (int rows = 0; rows < fList.size(); rows++) {
+            for (int cols = 0; cols < rowLen; cols ++) {
+                if (mouseLoc[0] == rows) { //dont check junk pipe if mouse is on same row/col
+                    // search down
+                    int crossingPipes = 0;
+                    if (pipeRoute[rows][cols] == '.') { // junk pipe found
+                        char corner = ' ';
+                        for (int down = 0; rows + down <  fList.size(); down ++) {
+                            if (pipeRoute[rows + down][cols] == '.') {
+                                continue;
+                            } 
+                            else if (pipeRoute[rows + down][cols] == '|') {
+                                continue;
+                            } 
+                            else if (pipeRoute[rows + down][cols] == '-') {
+                                crossingPipes ++;
+                            }
+                            else {
+                                if (pipeRoute[rows + down][cols] == 'J' && corner == 'F') {
+                                    crossingPipes ++;
+                                }
+                                if (pipeRoute[rows + down][cols] == 'L' && corner == '7') {
+                                    crossingPipes ++;
+                                }
+                                corner = pipeRoute[rows + down][cols];
+                            }
+                        }
+                        if (crossingPipes % 2 == 1) { // if theres an odd amount of crossing pipes, nest/junk pipe is within the loop
+                            pipeOutsideLoop++;
+                            pipeRoute[rows][cols] = 'X';
+                        }
+                        else {
+                            pipeRoute[rows][cols] = 'O';
+                        }
+                    }
+                    
+                }
+                else {
+                    // search right
+                    int crossingPipes = 0;
+                    if (pipeRoute[rows][cols] == '.') {
+                        char corner = ' ';
+                        for (int right = 0; cols + right < fList.get(rows).length(); right ++) {
+                            if (pipeRoute[rows][cols + right] == '.') {
+                                continue;
+                            } 
+                            else if (pipeRoute[rows][cols + right] == '-') {
+                                continue;
+                            } 
+                            else if (pipeRoute[rows][cols + right] == '|') {
+                                crossingPipes ++;
+                            }
+                            else {
+                                if (pipeRoute[rows][cols + right] == 'J' && corner == 'F') {
+                                    crossingPipes ++;
+                                }
+                                if (pipeRoute[rows][cols + right] == '7' && corner == 'L') {
+                                    crossingPipes ++;
+                                }
+                                corner = pipeRoute[rows][cols + right];
+                            }
+
+                        }
+                        if (crossingPipes % 2 == 1) {
+                            pipeOutsideLoop++;
+                            pipeRoute[rows][cols] = 'X';
+                        }
+                        else {
+                            pipeRoute[rows][cols] = 'O';
+                        }
+                    }
+
+                }
+            }
+        } 
+        System.out.println("pieces outslide loop: " + pipeOutsideLoop);
+
+        
+        System.out.print("resulting pipe loop with mouse starting at " + Arrays.toString(mouseLoc) + ": ");        
+        for (int rows = 0; rows < fList.size(); rows++) {
+            System.out.println("");
+            for (int cols = 0; cols < rowLen; cols ++) {
+                System.out.print(pipeRoute[rows][cols] + " ");
+            }
+        }
+        
+
+        System.out.print("\nThe furthest point a mouse can be is " + steps/2 + " steps away.");
     }
 
     public static boolean legalPipe (int[] coord, char direction, ArrayList<String> f) {

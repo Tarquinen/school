@@ -123,36 +123,30 @@ public class day11 {
         while ((line = f.readLine()) != null)
             fList.add(line);
         
-        //find rows and columns with no galaxies
+        //find rows and columns with no galaxies and store galaxy coordinates
         ArrayList<Integer> rowsWithoutGalaxies = new ArrayList<Integer>();
         ArrayList<Integer> colsWithoutGalaxies = new ArrayList<Integer>();
+        ArrayList<int[]> galaxyCoordinates = new ArrayList<int[]>();
 
         for (int rows = 0; rows < fList.size(); rows++) {
             String row = fList.get(rows);
             if (fList.get(rows).indexOf('#') == -1)
                 rowsWithoutGalaxies.add(rows);
             for (int cols = 0; cols < row.length(); cols++) {
+                if (fList.get(rows).charAt(cols) == '#') {
+                    galaxyCoordinates.add(new int[]{rows, cols});
+                }
                 for (int searchDown = 0; searchDown + rows < fList.size(); searchDown++) {
-                    if (fList.get(searchDown + rows).charAt(cols) == '#')
+                    if (fList.get(searchDown + rows).charAt(cols) == '#') {
                         break;
+                    }
                     if (searchDown == fList.size() - 1)
                         colsWithoutGalaxies.add(cols);
                 }
             }
         }
-
         System.out.println("Rows without galaxies: " + rowsWithoutGalaxies + "\nColumns without galaxies: " + colsWithoutGalaxies);
 
-        ArrayList<int[]> galaxyCoordinates = new ArrayList<int[]>();
-        for (int rows = 0; rows < fList.size(); rows ++) {
-            for (int cols = 0; cols < fList.get(rows).length(); cols ++) {
-                if (fList.get(rows).charAt(cols) == '#') {
-                    galaxyCoordinates.add(new int[]{rows, cols});
-                }
-            }
-        }
-
-        // int counter = 0;
         long totalDistance = 0;
         for (int i = 0; i < galaxyCoordinates.size(); i ++) {
             for (int j = i + 1; j < galaxyCoordinates.size(); j ++) {
@@ -161,19 +155,16 @@ public class day11 {
                 for (int blankrow : rowsWithoutGalaxies) {
                     if ((galaxyCoordinates.get(i)[0] < blankrow && galaxyCoordinates.get(j)[0] > blankrow) ||
                     (galaxyCoordinates.get(j)[0] < blankrow && galaxyCoordinates.get(i)[0] > blankrow)) {
-                        rowDistance += galaxyIncreaseAmount - 1;
+                        colDistance += galaxyIncreaseAmount - 1;
                     }
                 }
                 for (int blankcol : colsWithoutGalaxies) {
                     if ((galaxyCoordinates.get(i)[1] < blankcol && galaxyCoordinates.get(j)[1] > blankcol) || 
                     (galaxyCoordinates.get(j)[1] < blankcol && galaxyCoordinates.get(i)[1] > blankcol)) {
-                        colDistance += galaxyIncreaseAmount - 1;
+                        rowDistance += galaxyIncreaseAmount - 1;
                     }
                 }
-
                 totalDistance += rowDistance + colDistance;
-                // counter ++;
-                // System.out.println(counter + ": distance between " + Arrays.toString(galaxyCoordinates.get(i)) + ", " + Arrays.toString(galaxyCoordinates.get(j)) + ": " + (rowDistance + colDistance));
             }
         }
         System.out.println("total distance: " + totalDistance);

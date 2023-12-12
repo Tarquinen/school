@@ -6,6 +6,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "Test",
+            "request": "launch",
+            "mainClass": "playground.Test",
+            "projectName": "CMSC 115_fa8b2ae3"
+        },
+        {
+            "type": "java",
             "name": "day11",
             "request": "launch",
             "mainClass": "adventOfCode.day11",

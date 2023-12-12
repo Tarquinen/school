@@ -10,8 +10,8 @@ public class day3 {
     public static void main(String[] args) throws Exception {
         BufferedReader file = new BufferedReader(new FileReader(
             "C:\\Users\\danny\\OneDrive\\Desktop\\Algo\\School-repo\\CMSC 115\\Java\\adventOfCode\\day3.txt"));
-        //part1(file);
-        part2(file);
+        part1(file);
+        //part2(file);
     }
 
     public static void part1 (BufferedReader f) throws Exception {

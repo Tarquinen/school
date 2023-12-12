@@ -25,7 +25,6 @@ public class EightQueens {
         long startTime = System.nanoTime();
         int[] lastQueen = new int[]{-1, 0};
         placeQueen(queens, lastQueen, desiredQueens); 
-                 
         while (solveable) {
             removeLastQueen(queens);
             lastQueen = lastQueenCoord(queens);

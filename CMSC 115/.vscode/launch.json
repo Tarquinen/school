@@ -6,6 +6,20 @@
     "configurations": [
         {
             "type": "java",
+            "name": "day11",
+            "request": "launch",
+            "mainClass": "adventOfCode.day11",
+            "projectName": "CMSC 115_fa8b2ae3"
+        },
+        {
+            "type": "java",
+            "name": "BeanMachine",
+            "request": "launch",
+            "mainClass": "playground.BeanMachine",
+            "projectName": "CMSC 115_fa8b2ae3"
+        },
+        {
+            "type": "java",
             "name": "day9",
             "request": "launch",
             "mainClass": "adventOfCode.day9",

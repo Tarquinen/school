@@ -7,7 +7,7 @@ import java.util.ArrayList;
 public class day11 {
     public static void main (String[] args) throws Exception {
         BufferedReader file = new BufferedReader(new FileReader(
-            "C:\\Users\\danny\\OneDrive\\Desktop\\Algo\\School-repo\\CMSC 115\\Java\\adventOfCode\\day11.txt"));
+            "C:\\Users\\danny\\OneDrive\\Desktop\\Algo\\School-repo\\adventOfCode\\day11.txt"));
         //part1(file);
         part2(file);
     }

@@ -5,16 +5,8 @@ import java.util.Scanner;
 
 
 public class Test {
-    private int t;
     public static void main(String[] args) {
-    }
-}
-
-
-class Circle {
-    private double radius;
-
-    public Circle(double radius) {
-        radius = radius;
+        Scanner input = new Scanner(System.in);
+        double a = input.nextDouble();
     }
 }

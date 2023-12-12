@@ -6,7 +6,7 @@ def main():
     print('Daniel Smolsky,', datetime.date.today(), end=', CMSC 105\n')
 
     print('Hello! are you looking for a house cleaning or yard service?\n'
-          'Enter "house" for house cleaning or "yard" for yard cleaning:')
+        'Enter "house" for house cleaning or "yard" for yard cleaning:')
 
     # ask user if they want a house or yard service
     while True:

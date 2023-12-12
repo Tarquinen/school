@@ -10,7 +10,7 @@ import java.util.Arrays;
 public class day10 {
     public static void main (String[] args) throws Exception {
         BufferedReader file = new BufferedReader(new FileReader(
-            "C:\\Users\\danny\\OneDrive\\Desktop\\Algo\\School-repo\\CMSC 115\\Java\\adventOfCode\\day10.txt"));
+            "C:\\Users\\danny\\OneDrive\\Desktop\\Algo\\School-repo\\adventOfCode\\day10.txt"));
         part1(file);
     }
 

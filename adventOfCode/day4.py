@@ -36,11 +36,11 @@ def main():
     input = open('C:\\Users\\danny\\OneDrive\\Desktop\\Algo\\School-repo\\adventOfCode\\day4.txt')
     inputLine = input.read().splitlines()
     
-    # # print input
+    # print input
     # for i in range(len(inputLine)):
     #     print(inputLine[i])
 
     part2(inputLine)
-    
+
 if __name__ == "__main__":
     main()

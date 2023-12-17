@@ -8,5 +8,7 @@ public class Test {
     public static void main(String[] args) {
         Scanner input = new Scanner(System.in);
         double a = input.nextDouble();
+        System.out.println(Math.sqrt(a));
+        input.close();
     }
 }

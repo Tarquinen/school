@@ -71,13 +71,12 @@ def part2(inputLines):
                 # print(f"all current seeds: converted: {convertedSeed} leftover: {leftoverSeedsFromRow}\n")
                 unconvertedSeeds = leftoverSeedsFromRow
                     
-            print(f"Map {i + 1} outputs: converted: {convertedSeeds}, unconverted: {unconvertedSeeds}\n")
+            # print(f"Map {i + 1} outputs: converted: {convertedSeeds}, unconverted: {unconvertedSeeds}\n")
             unconvertedSeeds = convertedSeeds + unconvertedSeeds
             convertedSeeds = []
         if min(unconvertedSeeds)[0] < smallestSeed:
             smallestSeed = min(unconvertedSeeds)[0]
-        print(f"smallest seed location: {smallestSeed}\n")
-    print(f"smallest seed final: {smallestSeed}")
+        print(f"smallest seed location up to seed batch # {1 + j // 2}: {smallestSeed}\n")
 
 def overlappingSeeds(inputseed, inputInc, mapSeed, mapInc):
     if inputseed > mapSeed + mapInc - 1 or inputseed + inputInc - 1 < mapSeed:

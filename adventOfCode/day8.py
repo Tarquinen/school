@@ -1,4 +1,5 @@
-import sys
+# https://adventofcode.com/2023/day/8
+
 import math
 
 def part1(inputLines):
@@ -39,32 +40,26 @@ def part2(inputLines):
         elementDict[element] = [left, right]
     # print(elementDict)
         
-    notAtDestination = True
     nodes = []
     stepsToZ = []
     stepCount = 0
     for element in elementDict:
         if element[-1] == 'A':
             nodes.append(element)
-    print(nodes)
+    print(f"starting nodes: {nodes}")
 
-    for i, node in enumerate(nodes):
+    for i in range(len(nodes)):
         stepCount = 0
-        notAtDestination = True
-        print(node)
-        while notAtDestination:
+        while nodes[i][-1] != 'Z':
             for step in instructions:
                 if step == 'L':
                     nodes[i] = elementDict[nodes[i]][0]
-                    # print(f"went left to node {nodes[i]}")
                 else:
                     nodes[i] = elementDict[nodes[i]][1]
-                    # print(f"went right to node {nodes[i]}")
                 stepCount += 1
                 if nodes[i][-1] == 'Z':
-                    print(f"step count: {stepCount}")
+                    print(f"step count to reach a node ending in Z: {stepCount}")
                     stepsToZ.append(stepCount)
-                    notAtDestination = False
                     break
     print(f"Total required steps for each node: {stepsToZ}")
 
@@ -80,6 +75,5 @@ def main():
     
 
     part2(inputLines)
-
 if __name__ == "__main__":
     main()

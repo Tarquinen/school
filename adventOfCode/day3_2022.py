@@ -32,11 +32,11 @@ def part2(inputLines):
             sum += ord(letter) - ord('a') + 1
     print(sum)
 
-
 def main():
     input = open('C:\\Users\\danny\\OneDrive\\Desktop\\Algo\\School-repo\\adventOfCode\\day3_2022.txt')
     inputLines = input.read().splitlines()
 
     part2(inputLines)
+
 if __name__ == "__main__":
     main()

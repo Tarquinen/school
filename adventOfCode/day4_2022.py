@@ -14,7 +14,6 @@ def part1(inputLines):
     print(f"contained: {contained}")
 
 def part2(inputLines):
-
     contained = 0
     for line in inputLines:
         e1 = []

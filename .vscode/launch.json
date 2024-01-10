@@ -5,109 +5,27 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "type": "java",
-            "name": "day11",
+            "name": "auto",
+            "type": "auto-debug",
             "request": "launch",
-            "mainClass": "adventOfCode.day11",
-            "projectName": "School-repo_45d59db"
+            "map": {
+                "*.py": "Python: Current File",
+                "*.java": "Java: Current File"
+            }
         },
         {
             "name": "Python: Current File",
             "type": "python",
             "request": "launch",
             "program": "${file}",
-            "justMyCode": true
+            "console": "integratedTerminal"
         },
         {
+            "name": "Java: Current File",
             "type": "java",
-            "name": "Main",
             "request": "launch",
-            "mainClass": "Main",
-            "projectName": "School-repo_45d59db"
-        },
-        {
-            "type": "java",
-            "name": "Week5Discussion",
-            "request": "launch",
-            "mainClass": "Week5.Week5Discussion",
-            "projectName": "School-repo_45d59db"
-        },
-        {
-            "type": "java",
-            "name": "disc",
-            "request": "launch",
-            "mainClass": "Week6.disc",
-            "projectName": "School-repo_45d59db"
-        },
-        {
-            "type": "java",
-            "name": "Exercise07_03",
-            "request": "launch",
-            "mainClass": "Week7.Exercise07_03",
-            "projectName": "School-repo_45d59db"
-        },
-        {
-            "type": "java",
-            "name": "Exercise07_19",
-            "request": "launch",
-            "mainClass": "Week7.Exercise07_19",
-            "projectName": "School-repo_45d59db"
-        },
-        {
-            "type": "java",
-            "name": "Exercise08_13",
-            "request": "launch",
-            "mainClass": "Week7.Exercise08_13",
-            "projectName": "School-repo_45d59db"
-        },
-        {
-            "type": "java",
-            "name": "Exercise08_21",
-            "request": "launch",
-            "mainClass": "Week7.Exercise08_21",
-            "projectName": "School-repo_45d59db"
-        },
-        {
-            "type": "java",
-            "name": "BeanMachine",
-            "request": "launch",
-            "mainClass": "playground.BeanMachine",
-            "projectName": "School-repo_45d59db"
-        },
-        {
-            "type": "java",
-            "name": "EightQueens",
-            "request": "launch",
-            "mainClass": "playground.EightQueens",
-            "projectName": "School-repo_45d59db"
-        },
-        {
-            "type": "java",
-            "name": "FourVertexPolygon",
-            "request": "launch",
-            "mainClass": "playground.FourVertexPolygon",
-            "projectName": "School-repo_45d59db"
-        },
-        {
-            "type": "java",
-            "name": "PrimeNumberMethod",
-            "request": "launch",
-            "mainClass": "playground.PrimeNumberMethod",
-            "projectName": "School-repo_45d59db"
-        },
-        {
-            "type": "java",
-            "name": "Test",
-            "request": "launch",
-            "mainClass": "playground.Test",
-            "projectName": "School-repo_45d59db"
-        },
-        {
-            "type": "java",
-            "name": "practice",
-            "request": "launch",
-            "mainClass": "playground.practice",
-            "projectName": "School-repo_45d59db"
+            "mainClass": "${file}",
+            "console": "integratedTerminal"
         }
     ]
 }

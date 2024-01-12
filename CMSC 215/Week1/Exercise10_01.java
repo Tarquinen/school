@@ -23,6 +23,7 @@ class Time {
     private int hour;
     private int minute;
     private int second;
+    
     Time() {
         setTime(System.currentTimeMillis());
     }
@@ -59,3 +60,7 @@ class Time {
         // System.out.println(this.hours + ":" + this.minutes + ":" + this.seconds);
     }
 }
+
+
+
+

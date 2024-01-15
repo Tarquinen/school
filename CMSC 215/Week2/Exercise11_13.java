@@ -8,7 +8,6 @@ public class Exercise11_13 {
         System.out.println("Enter ten integers: ");
         for (int i = 0; i < 10; i++) {
             list.add(input.nextInt());
-            // System.out.println(list);
         }
         removeDuplicate(list);
         input.close();

@@ -16,6 +16,7 @@ public class Exercise05_47 {
                         System.out.println(isbn + " is an invalid input");
                         invalid = true;
                         break;
+
                     }
                     d[i] = Integer.parseInt(isbn.substring(i, i + 1)); 
                 }

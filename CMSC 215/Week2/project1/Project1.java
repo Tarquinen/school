@@ -6,17 +6,16 @@
  * stored in an array, and then later accessed to determine the tallest player below average age.
  */
 
-
 package project1;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class project1 {
+public class Project1 {
     public static void main (String[] args) {
         Scanner input = new Scanner(System.in);
         System.out.println("How many players will be part of the data set?");
         int playerCount = input.nextInt();
-        ArrayList<Player> playersData = new ArrayList<Player>();
+        ArrayList<Player> playersData = new ArrayList<>();
         int combinedAge = 0;
 
         for (int i = 0; i < playerCount; i++) {

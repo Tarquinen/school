@@ -1,34 +1,16 @@
 // package Week1;
+import java.util.Scanner;
 
 public class test {
-        public static void main(String[] args) {
+    public static void main(String[] args) {
+        Scanner input = new Scanner(System.in);
+        System.out.println("Enter ten integers: ");
+        for (int i = 0; i < 10; i++) {
 
-            m(new GraduateStudent());
-            m(new Student());
-            m(new Person());
-            m(new Object());
-    } 
-        
-    public static void m(Student x) {
-            System.out.println(x.toString());
-    }
-}
-        
-class GraduateStudent extends Student {
-
-}
-        
-class Student extends Person {
-    @Override
-    public String toString() {
-        return "Student";
-    }
-}
-    
-class Person extends Object {
-    @Override
-    public String toString() {
-        return "Person";
+        }
     }
 
+    public static void removeDuplicate(ArrayList<Integer> list) {
+
+    }
 }

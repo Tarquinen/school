@@ -8,12 +8,15 @@ public class Exercise09_13 {
         int rows = input.nextInt();
         int cols = input.nextInt();
         System.out.println("Enter the array:");
+
+        //fill array
         double[][] array = new double[rows][cols];
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < cols; j++) {
                 array[i][j] = input.nextDouble();
             }
         }
+    
         Location myLocation = locateLargest(array);
         System.out.println("The largest element is " + myLocation.maxValue + ", located at ("
         + myLocation.row + ", " + myLocation.column + ")");
@@ -25,7 +28,7 @@ public class Exercise09_13 {
         Location myLocation = new Location();
         int rowLength = a.length;
         int colLength = a[0].length;
-        myLocation.maxValue = a[0][0];
+        myLocation.setMax(a[0][0]);
         for (int i = 0; i < rowLength; i++) {
             for (int j = 0; j < colLength; j++) {
                 if (myLocation.maxValue < a[i][j]) {

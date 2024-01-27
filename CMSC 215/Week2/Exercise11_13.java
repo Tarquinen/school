@@ -5,7 +5,7 @@ public class Exercise11_13 {
     public static void main(String[] args) {
         Scanner input = new Scanner(System.in);
         ArrayList<Integer> list = new ArrayList<>();
-        System.out.println("Enter ten integers: ");
+        System.out.print("Enter ten integers: ");
         for (int i = 0; i < 10; i++) {
             list.add(input.nextInt());
         }
@@ -23,6 +23,6 @@ public class Exercise11_13 {
             }
         }
         list = temp;
-        System.out.println(distinct);
+        System.out.println("The distinct integers are " + distinct);
     }    
 }

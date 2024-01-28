@@ -1,0 +1,5 @@
+Brown,William 72 230 Junior
+Johnson,Mary 21 77 Masters
+Jones,Sally 32 95 Sophomore
+Smith,John 18 77 Masters
+Doer,John 19 77 Senior

@@ -4,7 +4,7 @@ public class Student {
     private String NAME;
     private int CREDIT_HOURS;
     private int QUALITY_POINTS;
-    private static double GPA_THRESHOLD = 3;
+    private static double GPA_THRESHOLD;
 
     Student(String name, int creditHours, int qualityPoints) {
         this.NAME = name;

@@ -24,12 +24,20 @@ public class Project2 {
 
         //read data from the .txt one line at a time
         Scanner input = new Scanner(file);
-        while (input.hasNextLine()) {        
-            String line = input.nextLine();
-            String name = line.split(" ")[0].split(",")[1] + " " + line.split(" ")[0].split(",")[0];
-            int creditHours = Integer.parseInt(line.split(" ")[1]);
-            int qualityPoints = Integer.parseInt(line.split(" ")[2]);
-            String schoolYear = line.split(" ")[3];
+        while (input.hasNextLine()) {     
+            String[] line = input.nextLine().split(" ");
+            String name = line[0].split(",")[1] + " " + line[0].split(",")[0];
+            int creditHours = Integer.parseInt(line[1]);
+            int qualityPoints = Integer.parseInt(line[2]);
+            String schoolYear = line[3];
+
+
+            
+            // String line = input.nextLine();
+            // String name = line.split(" ")[0].split(",")[1] + " " + line.split(" ")[0].split(",")[0];
+            // int creditHours = Integer.parseInt(line.split(" ")[1]);
+            // int qualityPoints = Integer.parseInt(line.split(" ")[2]);
+            // String schoolYear = line.split(" ")[3];
 
             //add objects to the ArrayList
             if (schoolYear.equals("Masters") || schoolYear.equals("Doctorate")) {
@@ -50,6 +58,7 @@ public class Project2 {
         Student.setGpaThreshold(gpaThreshold);
         System.out.println("The threshold GPA to be a honor society member is " + gpaThreshold);
         
+        //print the students in the honor society
         System.out.println("The following students are members of the honor society: ");
         for (Student student : studentsList) {
             if (student.eligibleForHonorSociety()) {

@@ -38,14 +38,17 @@ public class Project2 {
             else {
                 studentsList.add(new Undergraduate(name, creditHours, qualityPoints, schoolYear));
             }
-
         }
-        //calculate average GPA and set the honors society threshold 
+        input.close();
+
+        //calculate average GPA 
         double totalGPA = 0;
         for (Student student : studentsList) {
             totalGPA += student.gpa();
         }
         double avgGPA = totalGPA / studentsList.size();
+
+        //set the honors society threshold
         double gpaThreshold = Double.parseDouble(String.format("%.2f", avgGPA + ((4 - avgGPA) / 2))); 
         Student.setGpaThreshold(gpaThreshold);
         System.out.println("The threshold GPA to be a honor society member is " + gpaThreshold);
@@ -57,7 +60,6 @@ public class Project2 {
                 System.out.println(student.toString());
             }
         }
-        input.close();
     }
 }
 

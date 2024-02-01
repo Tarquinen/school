@@ -2,8 +2,8 @@ package project2;
 
 public class Undergraduate extends Student {
     private String YEAR; 
-
-    Undergraduate(String name, int creditHours, int qualityPoints, String schoolYear) {
+    
+    public Undergraduate(String name, int creditHours, int qualityPoints, String schoolYear) {
         super(name, creditHours, qualityPoints);
         this.YEAR = schoolYear;
     }

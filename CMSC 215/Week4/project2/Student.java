@@ -1,23 +1,23 @@
 package project2;
 
 public class Student {
-    private String NAME;
-    private int CREDIT_HOURS;
-    private int QUALITY_POINTS;
+    private String name;
+    private int creditHours;
+    private int qualityPoints;
     private static double GPA_THRESHOLD;
 
-    Student(String name, int creditHours, int qualityPoints) {
-        this.NAME = name;
-        this.CREDIT_HOURS = creditHours;
-        this.QUALITY_POINTS = qualityPoints;
+    public Student(String name, int creditHours, int qualityPoints) {
+        this.name = name;
+        this.creditHours = creditHours;
+        this.qualityPoints = qualityPoints;
     }
 
-    public static void setGpaThreshold(double gpa) {
-        GPA_THRESHOLD = gpa;
+    public static void setGpaThreshold(double gpaThreshold) {
+        GPA_THRESHOLD = gpaThreshold;
     }
 
     public double gpa() {
-        return Double.parseDouble(String.format("%.2f", (double) this.QUALITY_POINTS / this.CREDIT_HOURS));
+        return Double.parseDouble(String.format("%.2f", (double) this.qualityPoints / this.creditHours));
     } 
 
     public boolean eligibleForHonorSociety() {
@@ -25,6 +25,6 @@ public class Student {
     }
 
     public String toString() {
-        return "Students name: " + this.NAME + " GPA: " + this.gpa();
+        return "Students name: " + this.name + " GPA: " + this.gpa();
     }
 }

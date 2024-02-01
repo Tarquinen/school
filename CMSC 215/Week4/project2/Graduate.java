@@ -1,16 +1,16 @@
 package project2;
 
 public class Graduate extends Student {
-    private String YEAR;
+    private String year;
     
-    Graduate(String name, int creditHours, int qualityPoints, String schoolYear) {
+    public Graduate(String name, int creditHours, int qualityPoints, String schoolYear) {
         super(name, creditHours, qualityPoints);
-        this.YEAR = schoolYear;
+        this.year = schoolYear;
     }
 
     @Override
     public boolean eligibleForHonorSociety() {
-        if (this.YEAR.equals("Doctorate")) {
+        if (this.year.equals("Doctorate")) {
             return false;
         }
         else {
@@ -20,6 +20,6 @@ public class Graduate extends Student {
 
     @Override
     public String toString() {
-        return super.toString() + " " + this.YEAR;
+        return super.toString() + " " + this.year;
     }
 }

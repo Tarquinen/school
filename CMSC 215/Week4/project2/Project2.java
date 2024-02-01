@@ -31,15 +31,7 @@ public class Project2 {
             int qualityPoints = Integer.parseInt(line[2]);
             String schoolYear = line[3];
 
-
-            
-            // String line = input.nextLine();
-            // String name = line.split(" ")[0].split(",")[1] + " " + line.split(" ")[0].split(",")[0];
-            // int creditHours = Integer.parseInt(line.split(" ")[1]);
-            // int qualityPoints = Integer.parseInt(line.split(" ")[2]);
-            // String schoolYear = line.split(" ")[3];
-
-            //add objects to the ArrayList
+            //add students to the ArrayList
             if (schoolYear.equals("Masters") || schoolYear.equals("Doctorate")) {
                 studentsList.add(new Graduate(name, creditHours, qualityPoints, schoolYear));
             }
@@ -59,7 +51,7 @@ public class Project2 {
         System.out.println("The threshold GPA to be a honor society member is " + gpaThreshold);
         
         //print the students in the honor society
-        System.out.println("The following students are members of the honor society: ");
+        System.out.println("The following students are members of the honor society:");
         for (Student student : studentsList) {
             if (student.eligibleForHonorSociety()) {
                 System.out.println(student.toString());

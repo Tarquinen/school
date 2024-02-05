@@ -1,3 +1,11 @@
+/* 
+ * Daniel Smolsky
+ * Programming Project 2: Student Honor Society
+ * Feb 2, 2024
+ * This class creates Graduate objects extending from the Student variables and methods. 
+ * This class has 1 instance variable and 2 methods that override methods within the Student class.
+*/
+
 package project2;
 
 public class Graduate extends Student {

@@ -1,6 +1,14 @@
+/* 
+ * Daniel Smolsky
+ * Programming Project 2: Student Honor Society
+ * Feb 2, 2024
+ * This class creates abstract Student objects. This class has 4 base variables and 4 methods
+ * that the Student subclasses will inherit.
+*/
+
 package project2;
 
-public class Student {
+public abstract class Student {
     private String name;
     private int creditHours;
     private int qualityPoints;
@@ -17,14 +25,15 @@ public class Student {
     }
 
     public double gpa() {
-        return Double.parseDouble(String.format("%.2f", (double) this.qualityPoints / this.creditHours));
+        return (double) this.qualityPoints / this.creditHours;
     } 
 
     public boolean eligibleForHonorSociety() {
         return this.gpa() >= GPA_THRESHOLD;
     }
 
+    @Override
     public String toString() {
-        return "Students name: " + this.name + " GPA: " + this.gpa();
+        return "Students name: " + this.name + " GPA: " + String.format("%.2f", this.gpa());
     }
 }

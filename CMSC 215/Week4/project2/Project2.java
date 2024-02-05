@@ -1,5 +1,13 @@
-package project2;
+/* 
+ * Daniel Smolsky
+ * Programming Project 2: Student Honor Society
+ * Feb 2, 2024
+ * This class reads in the students.txt file, calculates the average student GPA, uses 
+ * average GPA to calculate a honor society GPA requirement and displays all the students
+ * that meet the requirement. 
+*/
 
+package project2;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.io.File;
@@ -57,9 +65,8 @@ public class Project2 {
         System.out.println("The following students are members of the honor society:");
         for (Student student : studentsList) {
             if (student.eligibleForHonorSociety()) {
-                System.out.println(student.toString());
+                System.out.println(student);
             }
         }
     }
 }
-

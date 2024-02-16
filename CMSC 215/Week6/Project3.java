@@ -11,13 +11,13 @@ import javafx.scene.control.ComboBox;
 
 public class Project3 extends Application {
     
-    private TextField tfDistance = new TextField();
-    private TextField tfGasCost = new TextField();
-    private TextField tfGasMileage = new TextField();
-    private TextField tfNumDays = new TextField();
-    private TextField tfHotelCost = new TextField();
-    private TextField tfFoodCost = new TextField();
-    private TextField tfAttractions = new TextField();
+    private TextField tfDistance = new TextField("1000");
+    private TextField tfGasCost = new TextField("3.95");
+    private TextField tfGasMileage = new TextField("31");
+    private TextField tfNumDays = new TextField("2");
+    private TextField tfHotelCost = new TextField("150");
+    private TextField tfFoodCost = new TextField("125");
+    private TextField tfAttractions = new TextField("78");
     private TextField tfTotalTripCost = new TextField();
     private Button btCalculate = new Button("Calculate");
     private ComboBox<String> cbDistanceMeasurement = new ComboBox<>();
@@ -61,18 +61,33 @@ public class Project3 extends Application {
         
         // Set properties for UI
         gridPane.setAlignment(Pos.CENTER);
-        gridPane.setHalignment(btCalculate, HPos.CENTER);
+        GridPane.setHalignment(cbDistanceMeasurement, HPos.RIGHT);
+        GridPane.setHalignment(cbGasCostPerVol, HPos.RIGHT);
+        GridPane.setHalignment(cbDistancePerVol, HPos.RIGHT);
         btCalculate.setAlignment(Pos.CENTER);
         btCalculate.prefWidthProperty().bind(tfDistance.widthProperty());
+        cbDistanceMeasurement.setPrefWidth(130);
+        cbGasCostPerVol.setPrefWidth(130);
+        cbDistancePerVol.setPrefWidth(130);
+        tfTotalTripCost.setEditable(false);
+        tfDistance.setAlignment(Pos.BOTTOM_RIGHT);
+        tfGasCost.setAlignment(Pos.BOTTOM_RIGHT);
+        tfGasMileage.setAlignment(Pos.BOTTOM_RIGHT);
+        tfNumDays.setAlignment(Pos.BOTTOM_RIGHT);
+        tfHotelCost.setAlignment(Pos.BOTTOM_RIGHT);
+        tfFoodCost.setAlignment(Pos.BOTTOM_RIGHT);
+        tfAttractions.setAlignment(Pos.BOTTOM_RIGHT);
+        tfTotalTripCost.setAlignment(Pos.BOTTOM_RIGHT);
 
         // Process events
         btCalculate.setOnAction(e -> calculateTripCost());
 
+        // Create a scene and place it in the stage
         Scene scene = new Scene(gridPane, 400, 300);
+        gridPane.requestFocus();
         primaryStage.setTitle("Trip Cost Estimator");
         primaryStage.setScene(scene);
         primaryStage.show();
-
     }
 
         private void calculateTripCost() {
@@ -136,9 +151,6 @@ public class Project3 extends Application {
                 totalTripCost = (distance / gasMileage) * gasCost + (hotelCost + foodCost) * numDays + attractions;
                 return totalTripCost;
             }
-
-
-
         }
         
     public static void main(String[] args) {

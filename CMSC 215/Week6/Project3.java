@@ -1,3 +1,11 @@
+/* 
+ * Daniel Smolsky
+ * Programming Project 3: Trip Cost Estimator
+ * Feb 17, 2024
+ * This class creates a GUI that allows the user to input various trip costs and 
+ * calculates the total trip cost. 
+ */
+
 import javafx.application.Application;
 import javafx.geometry.HPos;
 import javafx.geometry.Pos;
@@ -11,6 +19,7 @@ import javafx.scene.control.ComboBox;
 
 public class Project3 extends Application {
     
+    // Create text fields, buttons, and combo boxes
     private TextField tfDistance = new TextField("1000");
     private TextField tfGasCost = new TextField("3.95");
     private TextField tfGasMileage = new TextField("31");
@@ -25,6 +34,8 @@ public class Project3 extends Application {
     private ComboBox<String> cbDistancePerVol = new ComboBox<>();
 
     public void start(Stage primaryStage) {   
+
+        // Create UI
         GridPane gridPane = new GridPane();
         gridPane.setHgap(5);
         gridPane.setVgap(5);
@@ -90,68 +101,71 @@ public class Project3 extends Application {
         primaryStage.show();
     }
 
-        private void calculateTripCost() {
-            // Get values from text fields
-            double distance = Double.parseDouble(tfDistance.getText());
-            double gasCost = Double.parseDouble(tfGasCost.getText());
-            double gasMileage = Double.parseDouble(tfGasMileage.getText());
-            double numDays = Double.parseDouble(tfNumDays.getText());
-            double hotelCost = Double.parseDouble(tfHotelCost.getText());
-            double foodCost = Double.parseDouble(tfFoodCost.getText());
-            double attractions = Double.parseDouble(tfAttractions.getText());
-            String setting1 = cbDistanceMeasurement.getValue();
-            String setting2 = cbGasCostPerVol.getValue();
-            String setting3 = cbDistancePerVol.getValue();
+    private void calculateTripCost() {
+        // Get values from text fields
+        double distance = Double.parseDouble(tfDistance.getText());
+        double gasCost = Double.parseDouble(tfGasCost.getText());
+        double gasMileage = Double.parseDouble(tfGasMileage.getText());
+        double numDays = Double.parseDouble(tfNumDays.getText());
+        double hotelCost = Double.parseDouble(tfHotelCost.getText());
+        double foodCost = Double.parseDouble(tfFoodCost.getText());
+        double attractions = Double.parseDouble(tfAttractions.getText());
+        String setting1 = cbDistanceMeasurement.getValue();
+        String setting2 = cbGasCostPerVol.getValue();
+        String setting3 = cbDistancePerVol.getValue();
 
-            // Create TripCost object
-            TripCost tripCost = new TripCost(distance, gasCost, gasMileage, numDays, hotelCost, foodCost, 
-            attractions, setting1, setting2, setting3);
+        // Create a TripCost object
+        TripCost tripCost = new TripCost(distance, gasCost, gasMileage, numDays, hotelCost, foodCost, 
+        attractions, setting1, setting2, setting3);
 
-            // Display total trip cost
-            tfTotalTripCost.setText(String.format("$%.2f", tripCost.calculateTripCost()));
+        // Display total trip cost in text field
+        tfTotalTripCost.setText(String.format("$%.2f", tripCost.calculateTripCost()));
+    }
+
+    private class TripCost {
+        // Create variables
+        private double distance;
+        private double gasCost;
+        private double gasMileage;
+        private double numDays;
+        private double hotelCost;
+        private double foodCost;
+        private double attractions;
+        private String setting1;
+        private String setting2;
+        private String setting3;
+
+        // Constructor for TripCost
+        public TripCost (double distance, double gasCost, double gasMileage, double numDays, double hotelCost, double foodCost, 
+            double attractions, String setting1, String setting2, String setting3) {
+            this.distance = distance;
+            this.gasCost = gasCost;
+            this.gasMileage = gasMileage;
+            this.numDays = numDays;
+            this.hotelCost = hotelCost;
+            this.foodCost = foodCost;
+            this.attractions = attractions;
+            this.setting1 = setting1;
+            this.setting2 = setting2;
+            this.setting3 = setting3;
         }
-
-        private class TripCost {
-            private double distance;
-            private double gasCost;
-            private double gasMileage;
-            private double numDays;
-            private double hotelCost;
-            private double foodCost;
-            private double attractions;
-            private String setting1;
-            private String setting2;
-            private String setting3;
-
-            TripCost (double distance, double gasCost, double gasMileage, double numDays, double hotelCost, double foodCost, 
-                double attractions, String setting1, String setting2, String setting3) {
-                this.distance = distance;
-                this.gasCost = gasCost;
-                this.gasMileage = gasMileage;
-                this.numDays = numDays;
-                this.hotelCost = hotelCost;
-                this.foodCost = foodCost;
-                this.attractions = attractions;
-                this.setting1 = setting1;
-                this.setting2 = setting2;
-                this.setting3 = setting3;
+        
+        // Calculate total trip cost
+        public double calculateTripCost() {
+            double totalTripCost = 0;
+            if (setting1.equals("Kilometers")) {
+                distance = distance * 0.621371;
             }
-            
-            public double calculateTripCost() {
-                double totalTripCost = 0;
-                if (setting1.equals("Kilometers")) {
-                    distance = distance * 0.621371;
-                }
-                if (setting2.equals("Dollars/Liter")) {
-                    gasCost = gasCost * 3.78541;
-                }
-                if (setting3.equals("Kilometers/Liter")) {
-                    gasMileage = gasMileage * 0.425144;
-                }
-                totalTripCost = (distance / gasMileage) * gasCost + (hotelCost + foodCost) * numDays + attractions;
-                return totalTripCost;
+            if (setting2.equals("Dollars/Liter")) {
+                gasCost = gasCost * 3.78541;
             }
+            if (setting3.equals("Kilometers/Liter")) {
+                gasMileage = gasMileage * 0.425144;
+            }
+            totalTripCost = (distance / gasMileage) * gasCost + (hotelCost + foodCost) * numDays + attractions;
+            return totalTripCost;
         }
+    }
         
     public static void main(String[] args) {
         launch(args);

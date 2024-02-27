@@ -3,7 +3,7 @@ public class test {
         // int[] arr = new int[]{3, 6, 8, 1, 3, 1, 9, 34, 11};
         // System.out.println(binarySearch(arr, 34));
         System.out.println(fibonacciDynamic(50)); // not index based
-        System.out.println(fibonacci(49)); // index based
+        // System.out.println(fibonacci(49)); // index based
     }
     
     public static int binarySearch(int[] array, int key) {

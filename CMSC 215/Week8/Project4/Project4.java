@@ -1,3 +1,15 @@
+/**
+ * Daniel Smolsky
+ * programming project 4 - Time Interval Checker
+ * February 28, 2017
+ * The Project4 class extends the Application class from JavaFX to create a GUI application.
+ * This application allows users to input time intervals and a specific time to check against these intervals.
+ * It provides functionality to compare two time intervals to see if they overlap and to check if a specific time falls within these intervals.
+ * The GUI is built using JavaFX components such as Labels, TextFields, and Buttons, arranged in a GridPane layout.
+ * Users can input times in a 12-hour format with AM/PM notation, and the application handles the conversion and comparison internally.
+ */
+
+
 package Project4;
 
 import javafx.application.Application;
@@ -27,6 +39,8 @@ public class Project4 extends Application {
     private TextField tfTimeToCheck = new TextField();
     private Button btCheckTime = new Button("Check Time");
     private TextField tfResult = new TextField();
+
+    // Create time and interval objects
     private Time i1StartTime;
     private Time i1EndTime;
     private Time i2StartTime;
@@ -101,7 +115,8 @@ public class Project4 extends Application {
         primaryStage.setScene(scene);
         primaryStage.show();
     }    
-    // create time and interval objects, triggered by button clicks 
+
+    // create time and interval objects
     private void createObjects() throws InvalidTime {
         i1StartTime = new Time(tfStartTimeI1.getText());
         i1EndTime = new Time(tfEndTimeI1.getText());
@@ -111,6 +126,7 @@ public class Project4 extends Application {
         interval2 = new Interval<>(i2StartTime, i2EndTime);
     }
 
+    // compare intervals and display result
     private void compareIntervals() throws InvalidTime {
         createObjects();
         if (interval2.subinterval(interval1)) {
@@ -127,6 +143,7 @@ public class Project4 extends Application {
         }
     }
 
+    // check if time is within intervals and display result
     private void checkTime() throws InvalidTime {
         createObjects();
         timeToCheck = new Time(tfTimeToCheck.getText());

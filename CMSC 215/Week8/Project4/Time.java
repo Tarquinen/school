@@ -1,4 +1,7 @@
 /**
+ * Daniel Smolsky
+ * Programming Project 4 - Time Interval Checker
+ * February 28, 2017
  * Represents a time in either 12-hour or 24-hour format.
  * This class provides methods to set and validate time in 12-hour format with AM/PM notation,
  * and internally converts and stores the time in 24-hour format for comparison purposes.

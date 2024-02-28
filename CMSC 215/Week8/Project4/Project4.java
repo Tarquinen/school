@@ -10,6 +10,7 @@ import javafx.stage.Stage;
 import javafx.geometry.Pos;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
+import javafx.scene.Node;
 
 public class Project4 extends Application {
     // Create text fields and buttons and initizalize some values
@@ -26,6 +27,14 @@ public class Project4 extends Application {
     private TextField tfTimeToCheck = new TextField();
     private Button btCheckTime = new Button("Check Time");
     private TextField tfResult = new TextField();
+    private Time i1StartTime;
+    private Time i1EndTime;
+    private Time i2StartTime;
+    private Time i2EndTime;
+    private Time timeToCheck;
+    private Interval<Time> interval1;
+    private Interval<Time> interval2;
+
 
     public void start(Stage primaryStage) {
         // Create UI
@@ -63,14 +72,27 @@ public class Project4 extends Application {
         tfResult.setPrefWidth(400);
         tfResult.setEditable(false);
 
+        for (Node node : gridPane.getChildren()) {
+            if (node instanceof TextField) {
+                ((TextField)node).setAlignment(Pos.CENTER);
+            }
+        }
+
         // process events
         btCompareIntervals.setOnAction(e -> {
             try {
                 compareIntervals();
             } catch (InvalidTime ex) {
                 tfResult.setText(ex.getMessage());
-            }
-        });
+            }    
+        });    
+        btCheckTime.setOnAction(e -> {;
+            try {
+                checkTime();
+            } catch (InvalidTime ex) {
+                tfResult.setText(ex.getMessage());
+            }    
+        });    
 
         // create a scene and place it in the stage
         Scene scene = new Scene(gridPane, 410, 210);
@@ -78,15 +100,19 @@ public class Project4 extends Application {
         primaryStage.setTitle("Time Interval Checker");
         primaryStage.setScene(scene);
         primaryStage.show();
+    }    
+    // create time and interval objects, triggered by button clicks 
+    private void createObjects() throws InvalidTime {
+        i1StartTime = new Time(tfStartTimeI1.getText());
+        i1EndTime = new Time(tfEndTimeI1.getText());
+        i2StartTime = new Time(tfStartTimeI2.getText());
+        i2EndTime = new Time(tfEndTimeI2.getText());
+        interval1 = new Interval<>(i1StartTime, i1EndTime);
+        interval2 = new Interval<>(i2StartTime, i2EndTime);
     }
 
     private void compareIntervals() throws InvalidTime {
-        Time i1StartTime = new Time(tfStartTimeI1.getText());
-        Time i1EndTime = new Time(tfEndTimeI1.getText());
-        Time i2StartTime = new Time(tfStartTimeI2.getText());
-        Time i2EndTime = new Time(tfEndTimeI2.getText());
-        Interval<Time> interval1 = new Interval<>(i1StartTime, i1EndTime);
-        Interval<Time> interval2 = new Interval<>(i2StartTime, i2EndTime);
+        createObjects();
         if (interval2.subinterval(interval1)) {
             tfResult.setText("Interval 1 is a sub-interval of interval 2");
         }
@@ -99,8 +125,23 @@ public class Project4 extends Application {
         else {
             tfResult.setText("the intervals are disjoint");
         }
+    }
 
-        
+    private void checkTime() throws InvalidTime {
+        createObjects();
+        timeToCheck = new Time(tfTimeToCheck.getText());
+        if (interval1.within(timeToCheck) && interval2.within(timeToCheck)) {
+            tfResult.setText("Both intervals contain the time " + timeToCheck);
+        }
+        else if (interval1.within(timeToCheck)) {
+            tfResult.setText("Only interval 1 contains the time " + timeToCheck);
+        }
+        else if (interval2.within(timeToCheck)) {
+            tfResult.setText("Only interval 2 contains the time " + timeToCheck); 
+        }
+        else {
+            tfResult.setText("Neither interval contains the time " + timeToCheck);
+        }
     }
 
     public static void main(String[] args) throws Exception {

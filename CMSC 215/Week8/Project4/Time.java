@@ -1,3 +1,10 @@
+/**
+ * Represents a time in either 12-hour or 24-hour format.
+ * This class provides methods to set and validate time in 12-hour format with AM/PM notation,
+ * and internally converts and stores the time in 24-hour format for comparison purposes.
+ * It implements the Comparable interface to allow comparison between Time objects.
+ */
+
 package Project4;
 
 public class Time implements Comparable<Time> {
@@ -82,5 +89,11 @@ public class Time implements Comparable<Time> {
             }
             else return 0; //times are equal
         }
+    }
+
+    // return string representation of the time
+    @Override
+    public String toString() {
+        return (hours < 10 ? "0" + hours : hours) + ":" + (minutes < 10 ? "0" + minutes : minutes) + " " + meridian;
     }
 }

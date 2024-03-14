@@ -1,6 +1,6 @@
 /**
  * Daniel Smolsky
- * programming project 4 - Time Interval Checker
+ * Programming project 4 - Time Interval Checker
  * February 28, 2017
  * The Project4 class extends the Application class from JavaFX to create a GUI application.
  * This application allows users to input time intervals and a specific time to check against these intervals.

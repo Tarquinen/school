@@ -17,10 +17,12 @@ public class FileScanner {
    }
 
    public char nextChar() {
+      //continue to next line when reached end of line
       if (currLine == null || charIndex == currLine.length()) {
          if (inputScanner.hasNextLine()) {
             currLine = inputScanner.nextLine();
             charIndex = 0;
+            //recursive call when blank rows are encountered
             if (currLine.isEmpty()) {
                return nextChar();
             }
@@ -34,16 +36,15 @@ public class FileScanner {
    }
 
    public char parsedNextChar() {
-      char nextChar = this.nextChar();
-      // System.out.println("index: " + charIndex + " line length: " + currLine.length());
+      char nextChar = nextChar();
 
-      //recursive call to skip characters
+      //recursive call to skip character literals
       if (nextChar == '\'' && !withinChar) {
          withinChar = true;
       }
       else if (nextChar == '\'' && withinChar) {
          withinChar = false;
-         nextChar = this.nextChar();
+         nextChar = nextChar();
       }
       
       //recursive call to skip String literals
@@ -52,7 +53,21 @@ public class FileScanner {
       }
       else if (nextChar == '\"' && withinString) {
          withinString = false;
-         nextChar = this.nextChar();
+         nextChar = nextChar();
+      }
+
+      //recursive call to skip multi-line comments
+      if (nextChar == '/' && !withinMultiLineComment) {
+         if (charIndex < currLine.length() && currLine.charAt(charIndex) == '*') {
+            withinMultiLineComment = true;
+         }
+      }
+      else if (nextChar == '*' && withinMultiLineComment) {
+         if (charIndex < currLine.length() && currLine.charAt(charIndex) == '/') {
+            withinMultiLineComment = false;
+            nextChar(); //extra skipped character to skip the / in */
+            nextChar = nextChar();
+         }
       }
 
       //recursive call to skip single-line comments
@@ -66,21 +81,8 @@ public class FileScanner {
          }
       }
 
-      //recursive call to skip multi-line comments
-      if (nextChar == '/' && !withinMultiLineComment) {
-         if (charIndex < currLine.length() && currLine.charAt(charIndex) == '*') {
-            withinMultiLineComment = true;
-         }
-      }
-      else if (nextChar == '*' && withinMultiLineComment) {
-         if (charIndex < currLine.length() && currLine.charAt(charIndex) == '/') {
-            withinMultiLineComment = false;
-            this.nextChar(); //extra skipped character to skip the / in */
-            nextChar = this.nextChar();
-         }
-      }
 
-      //execute recursion when within String, char text, or multi line comment
+      //execute recursion when within String, char literals, or multi line comment
       if (withinString || withinChar || withinMultiLineComment) {
          return parsedNextChar();
       } 
@@ -88,10 +90,4 @@ public class FileScanner {
          return nextChar;
       }
    }
-
-
-
-
-
-
 }

@@ -20,7 +20,7 @@ public class project1 {
       }
       input.close();
 
-      for (int i = 0; i < 500; i++) {
+      while (true) {
          char c = file.parsedNextChar();
          if (c != '\0') {
             System.out.print(c);

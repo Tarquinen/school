@@ -5,12 +5,11 @@ import java.util.Scanner;
 public class FileScanner {
    private File file;
    private Scanner inputScanner;
-   int charIndex = 0;
-   String currLine = null;
-   boolean withinChar = false;
-   boolean withinString = false;
-   boolean withinlineComment = false;
-   boolean withinMultiLineComment = false;
+   private int charIndex = 0;
+   private String currLine = null;
+   private boolean withinChar = false;
+   private boolean withinString = false;
+   private boolean withinMultiLineComment = false;
    
    public FileScanner(String name) throws FileNotFoundException {
       file = new File(name);
@@ -22,6 +21,13 @@ public class FileScanner {
          if (inputScanner.hasNextLine()) {
             currLine = inputScanner.nextLine();
             charIndex = 0;
+            if (currLine.isEmpty()) {
+               return nextChar();
+            }
+         }
+         else {
+            //return null character
+            return '\0';
          }
       }
       return currLine.charAt(charIndex++);
@@ -29,7 +35,9 @@ public class FileScanner {
 
    public char parsedNextChar() {
       char nextChar = this.nextChar();
+      // System.out.println("index: " + charIndex + " line length: " + currLine.length());
 
+      //recursive call to skip characters
       if (nextChar == '\'' && !withinChar) {
          withinChar = true;
       }
@@ -37,7 +45,8 @@ public class FileScanner {
          withinChar = false;
          nextChar = this.nextChar();
       }
-
+      
+      //recursive call to skip String literals
       if (nextChar == '\"' && !withinString) {
          withinString = true;
       }
@@ -46,24 +55,33 @@ public class FileScanner {
          nextChar = this.nextChar();
       }
 
+      //recursive call to skip single-line comments
       if (nextChar == '/' && !withinChar && !withinString) {
-         System.out.println("in here");
-         // System.out.println("index: " + charIndex + " line length: " + currLine.length());
-         // if (charIndex < currLine.length()) {
-            if (charIndex < currLine.length() &&  currLine.charAt(charIndex) == '/') {
-               if (inputScanner.hasNextLine()) {
-                  currLine = inputScanner.nextLine();
-                  charIndex = 0;
-
-               }
-               return parsedNextChar();
+         if (charIndex < currLine.length() && currLine.charAt(charIndex) == '/') {
+            if (inputScanner.hasNextLine()) {
+               currLine = inputScanner.nextLine();
+               charIndex = 0;
             }
-         // }
+            return parsedNextChar();
+         }
       }
 
+      //recursive call to skip multi-line comments
+      if (nextChar == '/' && !withinMultiLineComment) {
+         if (charIndex < currLine.length() && currLine.charAt(charIndex) == '*') {
+            withinMultiLineComment = true;
+         }
+      }
+      else if (nextChar == '*' && withinMultiLineComment) {
+         if (charIndex < currLine.length() && currLine.charAt(charIndex) == '/') {
+            withinMultiLineComment = false;
+            this.nextChar(); //extra skipped character to skip the / in */
+            nextChar = this.nextChar();
+         }
+      }
 
-      
-      if (withinString || withinChar) {
+      //execute recursion when within String, char text, or multi line comment
+      if (withinString || withinChar || withinMultiLineComment) {
          return parsedNextChar();
       } 
       else {

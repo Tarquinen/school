@@ -20,8 +20,14 @@ public class project1 {
       }
       input.close();
 
-      for (int i = 0; i < 110; i++) {
-         System.out.print(file.parsedNextChar());
+      for (int i = 0; i < 500; i++) {
+         char c = file.parsedNextChar();
+         if (c != '\0') {
+            System.out.print(c);
+         }
+         else {
+            break;
+         }
       }
    }
 }

@@ -1,3 +1,13 @@
+/* 
+ * Daniel Smolsky
+ * Programming Project 1 - Matching Delimiters
+ * March 22, 2024
+ * This class is designed to scan through a given file character by character, 
+ * keeping track of the line and character number. It supports skipping over 
+ * non-significant characters such as spaces, character literals, and comments, 
+ * to facilitate parsing tasks such as checking for matching delimiters in a Java source file.
+ */
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
@@ -19,7 +29,7 @@ public class FileScanner {
       return "line number: " + lineNum + " character number: " + charNum;
    }
 
-   public char nextChar() {
+   private char nextChar() {
       //continue to next line when reached end of line
       if (currLine == null || charNum == currLine.length()) {
          if (file.hasNextLine()) {
@@ -87,7 +97,7 @@ public class FileScanner {
          }
       }
 
-      //execute recursion when within String, char literals, or multi line comment
+      //execute recursion when within String, char literals, or multi-line comment
       if (withinString || withinChar || withinMultiLineComment) {
          return nextSignificantChar();
       } 

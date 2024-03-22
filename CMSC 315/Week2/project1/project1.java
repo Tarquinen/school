@@ -17,8 +17,7 @@ public class project1 {
       String filename;
       while (true) {
          System.out.println("Enter a Java source file: ");
-         // filename = input.nextLine();
-         filename = "testfile.java";
+         filename = input.nextLine();
          try {
             // repeat create file object until successful
             file = new FileScanner(filename);
@@ -35,6 +34,7 @@ public class project1 {
 
       while (true) {
          char c = file.nextSignificantChar();
+         System.out.print(c);
          // System.out.print(c);
          if (c != '\0') { //continue until reaching null character
             // add opening delimiters to stack

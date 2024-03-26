@@ -50,62 +50,6 @@ public class FileScanner {
       return currLine.charAt(charNum++);
    }
 
-   // public char nextSignificantChar() {
-   //    char nextChar = nextChar();
-
-   //    //recursive call to skip character literals
-   //    if (nextChar == '\'' && !withinChar) {
-   //       withinChar = true;
-   //    }
-   //    else if (nextChar == '\'' && withinChar) {
-   //       withinChar = false;
-   //       nextChar = nextChar();
-   //    }
-      
-   //    //recursive call to skip String literals
-   //    if (nextChar == '\"' && !withinString) {
-   //       withinString = true;
-   //    }
-   //    else if (nextChar == '\"' && withinString) {
-   //       withinString = false;
-   //       nextChar = nextChar();
-   //    }
-
-   //    //recursive call to skip multi-line comments
-   //    if (nextChar == '/' && !withinMultiLineComment) {
-   //       if (charNum < currLine.length() && currLine.charAt(charNum) == '*') {
-   //          withinMultiLineComment = true;
-   //       }
-   //    }
-   //    else if (nextChar == '*' && withinMultiLineComment) {
-   //       if (charNum < currLine.length() && currLine.charAt(charNum) == '/') {
-   //          withinMultiLineComment = false;
-   //          nextChar(); //extra skipped character to skip the / in */
-   //          nextChar = nextChar();
-   //       }
-   //    }
-
-   //    //recursive call to skip single-line comments
-   //    if (nextChar == '/' && !withinChar && !withinString) {
-   //       if (charNum < currLine.length() && currLine.charAt(charNum) == '/') {
-   //          if (file.hasNextLine()) {
-   //             lineNum += 1;
-   //             currLine = file.nextLine();
-   //             charNum = 0;
-   //          }
-   //          return nextSignificantChar();
-   //       }
-   //    }
-
-   //    //execute recursion when within String, char literals, or multi-line comment
-   //    if (withinString || withinChar || withinMultiLineComment) {
-   //       return nextSignificantChar();
-   //    } 
-   //    else {
-   //       return nextChar;
-   //    }
-   // }
-
    public char nextSignificantChar() {
       char nextChar;
       do {
@@ -155,6 +99,7 @@ public class FileScanner {
                       charNum = 0;
                   }
                   return nextSignificantChar();
+                  // continue;
               }
           }
       } while (withinString || withinChar || withinMultiLineComment || nextChar == ' ');

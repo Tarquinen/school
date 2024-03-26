@@ -12,7 +12,7 @@ import java.util.ArrayList;
 
 public class EightQueens {
     
-    static int boardSize = 8; // change this value to change board size
+    static int boardSize = 20; // change this value to change board size
     static int [][] queens = new int[boardSize][boardSize]; //set the size of the chess board [x][y]
     static int[][] queenCoords = new int[queens.length + 1][2];
     static int xLength = queens.length;
@@ -58,7 +58,7 @@ public class EightQueens {
 
                     if (numQueens == desiredQueens) {
                         System.out.println("\nSOLUTION FOUND, took " + attemptCounter + " tries. Total solutions: " + (solutions.size() + 1));
-                        printBoard(queens);
+                        // printBoard(queens);
                         int[][] queenCoordsCopy = new int[queenCoords.length][];
                         for (int i = 0; i < queenCoords.length; i++) {
                             queenCoordsCopy[i] = queenCoords[i].clone();

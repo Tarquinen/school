@@ -32,7 +32,6 @@ public class GiftWrapping extends Application {
         }
         System.out.println(rightMostLowest()[0] + ", " + rightMostLowest()[1]);
         H.add(rightMostLowest());
-        System.out.println(H.get(0));
     
         pane.setOnMouseClicked(e -> {
             if (e.getButton() == MouseButton.PRIMARY && !duplicateDot((int)e.getX(), (int)e.getY())){

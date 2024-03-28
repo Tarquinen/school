@@ -12,43 +12,42 @@ public class GiftWrapping extends Application {
     static ArrayList<Integer[]> dotCoords = new ArrayList<Integer[]>(); // store all points
     static ArrayList<Integer[]> H = new ArrayList<Integer[]>(); // store perimeter points
     static Pane pane = new Pane();
-    static final int INITIAL_DOT_COUNT = 4;
+    static final int INITIAL_DOT_COUNT = 20;
 
     public void start(Stage primaryStage) {
+        // create scene
+        Scene scene = new Scene(pane, 800, 400);
+        primaryStage.setScene(scene);
+        primaryStage.show();
         
         //add initial dots
         for (int i = 0; i < INITIAL_DOT_COUNT; i++) {
-            int x = (int)(Math.random() * 400);
+            int x = (int)(Math.random() * 800);
             int y = (int)(Math.random() * 400);
             
             // only add dot if it does not overlap with another dot
-            if (duplicateDot(x, y)) {
+            if (isDuplicateDot(x, y)) {
                 i--;
                 continue;
             }
             placeDot(x, y, Color.BLACK);
         }
-
+        
         giftWrap(); // wrap the initial dots
-
+        
         // add a new dot on left click
         pane.setOnMouseClicked(e -> {
             // coordinates of click
             int x = (int)e.getX();
             int y = (int)e.getY();
             
-            if (e.getButton() == MouseButton.PRIMARY && !duplicateDot(x, y)) {
+            if (e.getButton() == MouseButton.PRIMARY && !isDuplicateDot(x, y)) {
                 placeDot(x, y, Color.BLACK);
                 giftWrap();
             }
         });
-        
-        // create scene
-        Scene scene = new Scene(pane, 400, 400);
-        primaryStage.setScene(scene);
-        primaryStage.show();
     }
-
+    
     // wrap the dots with a gift wrapping algorithm
     public static void giftWrap() {
         // remove all lines on pane from previous gift wrapping
@@ -96,8 +95,9 @@ public class GiftWrapping extends Application {
         line.setStartY(t0[1]); 
         line.setEndX(t1[0]);
         line.setEndY(t1[1]);
-        pane.getChildren().add(line);
         line.setStroke(color);
+        pane.getChildren().add(line);
+        line.toBack(); // move line to back so dots are easier to click
     }
 
     // place a dot on the pane
@@ -107,7 +107,7 @@ public class GiftWrapping extends Application {
         dot.setCenterX(x);
         dot.setCenterY(y);
         pane.getChildren().add(dot);
-        dot.setOnMouseClicked(f -> {
+        dot.setOnMouseClicked(f -> { // remove dot on right click
             if (f.getButton() == MouseButton.SECONDARY) {
                 pane.getChildren().remove(dot);
                 removeDot(x, y);
@@ -126,12 +126,20 @@ public class GiftWrapping extends Application {
 
         // line t0 > t1 is vertical
         if (t0[0].equals(t1[0])) {
-            ptIntersectXCoord = t0[0];
+            if (t0[1] > t1[1]) { // t0 is below t1 (y increases downwards)
+                return p[0] > t0[0]; 
+            } else {
+                return p[0] < t0[0];
+            }
         }
 
         //line t0 > t1 is horizontal
         else if (t0[1].equals(t1[1])) {
-            ptIntersectXCoord = p[0];
+            if (t0[0] < t1[0]) { // t0 is to the left of t1 (x increases to the right)
+                return p[1] > t0[1]; 
+            } else {
+                return p[1] < t0[1];
+            }
         }
 
         else {
@@ -144,20 +152,10 @@ public class GiftWrapping extends Application {
 
         // evalute if p is right of line t0 > t1
         if (p[0] > ptIntersectXCoord) {
-            if (t0[1] > t1[1]) {
-                return true;
-            }
-            else {
-                return false;
-            }
+            return t0[1] > t1[1];
         }
         else {
-            if (t0[1] < t1[1]) {
-                return true;
-            }
-            else {
-                return false;
-            }
+            return t0[1] < t1[1];
         }
     }
     
@@ -165,20 +163,20 @@ public class GiftWrapping extends Application {
     public static Integer[] rightMostLowest () {
         Integer[] lowest = dotCoords.get(0);
         for (Integer[] p : dotCoords) {
-            if (p[1] > lowest[1]) {
+            if (p[1] > lowest[1]) 
                 lowest = p;
-            }
             else if (p[1] == lowest[1]) {
-                if (p[0] > lowest[0]) lowest = p;
+                if (p[0] > lowest[0]) 
+                    lowest = p;
             }
         }
         return lowest;
     }
 
     // check if a dot already exists at the given coordinates
-    public static boolean duplicateDot(int x, int y) {
+    public static boolean isDuplicateDot(int x, int y) {
         for (int i = 0; i < dotCoords.size(); i++) {
-            if (dotCoords.get(i)[0] == x && dotCoords.get(i)[1] == y) {
+            if (Math.abs(dotCoords.get(i)[0] - x) <= 8 && Math.abs(dotCoords.get(i)[1] - y) <= 8) {
                 return true;
             }
         }

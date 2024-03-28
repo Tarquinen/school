@@ -5,41 +5,6 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "type": "java",
-            "name": "GiftWrapping",
-            "request": "launch",
-            "mainClass": "GiftWrapping",
-            "projectName": "School-repo_45d59db"
-        },
-        {
-            "type": "java",
-            "name": "GiftWrapping",
-            "request": "launch",
-            "mainClass": "GiftWrapping",
-            "projectName": "School-repo_d2603374"
-        },
-        {
-            "type": "java",
-            "name": "test2",
-            "request": "launch",
-            "mainClass": "test2",
-            "projectName": "School-repo_d2603374"
-        },
-        {
-            "type": "java",
-            "name": "test",
-            "request": "launch",
-            "mainClass": "test",
-            "projectName": "School-repo_d2603374"
-        },
-        {
-            "type": "java",
-            "name": "Project3",
-            "request": "launch",
-            "mainClass": "Project3",
-            "projectName": "School-repo_d2603374"
-        },
-        {
             "name": "auto",
             "type": "auto-debug",
             "request": "launch",

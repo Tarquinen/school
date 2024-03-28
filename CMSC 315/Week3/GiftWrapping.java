@@ -118,12 +118,6 @@ public class GiftWrapping extends Application {
 
     // determine if point p is right of line t0 > t1
     public static boolean rightOfLine(Integer[] t0, Integer[] t1, Integer[] p) {
-        double tSlope; // slop of line t0 > t1
-        double tYIntercept; //y intercept of line t0 > t1
-        double perpendicularSlope; // slope of line perpendicular to line t0 > t1
-        double pYIntercept; // y intercept of point p with slope perpendicularSlope
-        double ptIntersectXCoord; // x coordinate of the two line intersections
-
         // line t0 > t1 is vertical
         if (t0[0].equals(t1[0])) {
             if (t0[1] > t1[1]) { // t0 is below t1 (y increases downwards)
@@ -143,19 +137,19 @@ public class GiftWrapping extends Application {
         }
 
         else {
-            tSlope =  (double)(t1[1] - t0[1]) / (t1[0] - t0[0]);
-            tYIntercept = t0[1] - tSlope * t0[0];
-            perpendicularSlope = -1/tSlope;
-            pYIntercept = p[1] - perpendicularSlope * p[0];
-            ptIntersectXCoord = (pYIntercept - tYIntercept) / (tSlope - perpendicularSlope);
-        }
+            double tSlope =  (double)(t1[1] - t0[1]) / (t1[0] - t0[0]); // slope of line t0 > t1
+            double tYIntercept = t0[1] - tSlope * t0[0]; // y intercept of line t0 > t1
+            double perpendicularSlope = -1/tSlope; // slope of line perpendicular to line t0 > t1
+            double pYIntercept = p[1] - perpendicularSlope * p[0]; // y intercept of point p with slope perpendicularSlope
+            double ptIntersectXCoord = (pYIntercept - tYIntercept) / (tSlope - perpendicularSlope); // x coordinate of the two line intersections
 
-        // evalute if p is right of line t0 > t1
-        if (p[0] > ptIntersectXCoord) {
-            return t0[1] > t1[1];
-        }
-        else {
-            return t0[1] < t1[1];
+            // evalute if p is right of line t0 > t1
+            if (p[0] > ptIntersectXCoord) {
+                return t0[1] > t1[1];
+            }
+            else {
+                return t0[1] < t1[1];
+            }
         }
     }
     

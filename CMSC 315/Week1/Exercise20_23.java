@@ -65,6 +65,7 @@ public class Exercise20_23 {
                 while (!operatorStack.isEmpty() &&
                 (operatorStack.peek() == '*' ||
                 operatorStack.peek() == '/' ||
+                operatorStack.peek() == '^' ||
                 operatorStack.peek() == '%')) {
                 processAnOperator(operandStack, operatorStack);
                 }

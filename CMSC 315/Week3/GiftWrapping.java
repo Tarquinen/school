@@ -4,94 +4,164 @@ import javafx.stage.Stage;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Line;
 import javafx.scene.input.MouseButton;
 import java.util.ArrayList;
 
 public class GiftWrapping extends Application {
-    static ArrayList<Integer[]> dotCoords = new ArrayList<Integer[]>();
-    static ArrayList<Integer[]> H = new ArrayList<Integer[]>();
+    static ArrayList<Integer[]> dotCoords = new ArrayList<Integer[]>(); // store all points
+    static ArrayList<Integer[]> H = new ArrayList<Integer[]>(); // store perimeter points
+    static Pane pane = new Pane();
+    static final int INITIAL_DOT_COUNT = 4;
+
     public void start(Stage primaryStage) {
-        int initialDotCount = 5;
-        Pane pane = new Pane();
-        for (int i = 0; i < initialDotCount; i++) {
-            Circle dot = new Circle(5, Color.RED);
+        
+        //add initial dots
+        for (int i = 0; i < INITIAL_DOT_COUNT; i++) {
             int x = (int)(Math.random() * 400);
             int y = (int)(Math.random() * 400);
-            dotCoords.add(new Integer[]{x, y});
-
-            dot.setCenterX(x);
-            dot.setCenterY(y);
-            pane.getChildren().add(dot);
-
-            dot.setOnMouseClicked(e -> {
-                if (e.getButton() == MouseButton.SECONDARY) {
-                    pane.getChildren().remove(dot);
-                    removeDot(x, y);
-                }
-            });
+            
+            // only add dot if it does not overlap with another dot
+            if (duplicateDot(x, y)) {
+                i--;
+                continue;
+            }
+            placeDot(x, y, Color.BLACK);
         }
-        System.out.println(rightMostLowest()[0] + ", " + rightMostLowest()[1]);
-        H.add(rightMostLowest());
-    
+
+        giftWrap(); // wrap the initial dots
+
+        // add a new dot on left click
         pane.setOnMouseClicked(e -> {
-            if (e.getButton() == MouseButton.PRIMARY && !duplicateDot((int)e.getX(), (int)e.getY())){
-                Circle dot = new Circle(5, Color.RED);
-                int x = (int)e.getX();
-                int y = (int)e.getY();
-
-                System.out.println("Adding dot at " + x + " " + y);
-                System.out.println("Array after addition");
-                dotCoords.add(new Integer[]{x, y});
-
-                //print array
-                for (int j = 0; j < dotCoords.size(); j++) {
-                    System.out.println(dotCoords.get(j)[0] + " " + dotCoords.get(j)[1]);
-                }
-
-                dot.setCenterX(x);
-                dot.setCenterY(y);
-                pane.getChildren().add(dot);
-
-                dot.setOnMouseClicked(f -> {
-                    if (f.getButton() == MouseButton.SECONDARY) {
-                        pane.getChildren().remove(dot);
-                        removeDot(x, y);
-                    }
-                });
+            // coordinates of click
+            int x = (int)e.getX();
+            int y = (int)e.getY();
+            
+            if (e.getButton() == MouseButton.PRIMARY && !duplicateDot(x, y)) {
+                placeDot(x, y, Color.BLACK);
+                giftWrap();
             }
         });
-
+        
+        // create scene
         Scene scene = new Scene(pane, 400, 400);
         primaryStage.setScene(scene);
         primaryStage.show();
     }
 
-    public static boolean duplicateDot(int x, int y) {
-        for (int i = 0; i < dotCoords.size(); i++) {
-            if (dotCoords.get(i)[0] == x && dotCoords.get(i)[1] == y) {
-                return true;
+    // wrap the dots with a gift wrapping algorithm
+    public static void giftWrap() {
+        // remove all lines on pane from previous gift wrapping
+        for (int i = 0; i < pane.getChildren().size(); i++) {
+            if (pane.getChildren().get(i) instanceof Line) {
+                pane.getChildren().remove(i);
+                i--;
             }
         }
-        return false;
-    }
+        
+        if (dotCoords.size() < 3) return; // not enough points to wrap (need at least 3 points)
 
-    public static void removeDot(int x, int y) {
-        for (int i = 0; i < dotCoords.size(); i++) {
-            if (dotCoords.get(i)[0] == x && dotCoords.get(i)[1] == y) {
-                dotCoords.remove(i);
-                System.out.println("Removing dot at " + x + " " + y);
-                //print array
-                System.out.println("Array after removal");
-                for (int j = 0; j < dotCoords.size(); j++) {
-                    System.out.println(dotCoords.get(j)[0] + " " + dotCoords.get(j)[1]);
+        // reset list of perimeter points
+        H.clear();
+        H.add(rightMostLowest());
+
+        // find the perimeter points
+        while (true) {
+            Integer[] HLast = H.get(H.size() - 1);
+            Integer[] t0 = dotCoords.get(0);
+            if (HLast.equals(t0)) {
+                t0 = dotCoords.get(1);
+            }
+            for (Integer[] t1 : dotCoords) {
+                if (t1.equals(HLast) || t1.equals(t0))
+                    continue;
+                if (rightOfLine(HLast, t0, t1)) { // t1 is right of line HLast > t0
+                    t0 = t1;
                 }
             }
+            lineBetweenDots(HLast, t0, Color.RED);
+
+            // check if the perimeter is complete by checking if the last point is the starting point
+            if (t0.equals(H.get(0)))
+                break;
+
+            H.add(t0);
         }
     }
-    public static void sortPoints() {
 
+    // draw a line between two points
+    public static void lineBetweenDots(Integer[] t0, Integer[] t1, Color color) {
+        Line line = new Line();
+        line.setStartX(t0[0]);
+        line.setStartY(t0[1]); 
+        line.setEndX(t1[0]);
+        line.setEndY(t1[1]);
+        pane.getChildren().add(line);
+        line.setStroke(color);
     }
 
+    // place a dot on the pane
+    public static void placeDot(int x, int y, Color color) {
+        dotCoords.add(new Integer[]{x, y});
+        Circle dot = new Circle(5, color);
+        dot.setCenterX(x);
+        dot.setCenterY(y);
+        pane.getChildren().add(dot);
+        dot.setOnMouseClicked(f -> {
+            if (f.getButton() == MouseButton.SECONDARY) {
+                pane.getChildren().remove(dot);
+                removeDot(x, y);
+                giftWrap();
+            }
+        });
+    }
+
+    // determine if point p is right of line t0 > t1
+    public static boolean rightOfLine(Integer[] t0, Integer[] t1, Integer[] p) {
+        double tSlope; // slop of line t0 > t1
+        double tYIntercept; //y intercept of line t0 > t1
+        double perpendicularSlope; // slope of line perpendicular to line t0 > t1
+        double pYIntercept; // y intercept of point p with slope perpendicularSlope
+        double ptIntersectXCoord; // x coordinate of the two line intersections
+
+        // line t0 > t1 is vertical
+        if (t0[0].equals(t1[0])) {
+            ptIntersectXCoord = t0[0];
+        }
+
+        //line t0 > t1 is horizontal
+        else if (t0[1].equals(t1[1])) {
+            ptIntersectXCoord = p[0];
+        }
+
+        else {
+            tSlope =  (double)(t1[1] - t0[1]) / (t1[0] - t0[0]);
+            tYIntercept = t0[1] - tSlope * t0[0];
+            perpendicularSlope = -1/tSlope;
+            pYIntercept = p[1] - perpendicularSlope * p[0];
+            ptIntersectXCoord = (pYIntercept - tYIntercept) / (tSlope - perpendicularSlope);
+        }
+
+        // evalute if p is right of line t0 > t1
+        if (p[0] > ptIntersectXCoord) {
+            if (t0[1] > t1[1]) {
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+        else {
+            if (t0[1] < t1[1]) {
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+    }
+    
+    // find the rightmost lowest point which will be the starting point of the perimeter
     public static Integer[] rightMostLowest () {
         Integer[] lowest = dotCoords.get(0);
         for (Integer[] p : dotCoords) {
@@ -103,6 +173,25 @@ public class GiftWrapping extends Application {
             }
         }
         return lowest;
+    }
+
+    // check if a dot already exists at the given coordinates
+    public static boolean duplicateDot(int x, int y) {
+        for (int i = 0; i < dotCoords.size(); i++) {
+            if (dotCoords.get(i)[0] == x && dotCoords.get(i)[1] == y) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    // remove a dot from the list of dots
+    public static void removeDot(int x, int y) {
+        for (int i = 0; i < dotCoords.size(); i++) {
+            if (dotCoords.get(i)[0] == x && dotCoords.get(i)[1] == y) {
+                dotCoords.remove(i);
+            }
+        }
     }
 
     public static void main(String[] args) {

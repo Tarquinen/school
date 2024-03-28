@@ -9,6 +9,13 @@
             "name": "GiftWrapping",
             "request": "launch",
             "mainClass": "GiftWrapping",
+            "projectName": "School-repo_45d59db"
+        },
+        {
+            "type": "java",
+            "name": "GiftWrapping",
+            "request": "launch",
+            "mainClass": "GiftWrapping",
             "projectName": "School-repo_d2603374"
         },
         {

@@ -67,10 +67,11 @@ public class GiftWrapping extends Application {
         // find the perimeter points
         while (true) {
             Integer[] HLast = H.get(H.size() - 1);
-            Integer[] t0 = dotCoords.get(0);
-            if (HLast.equals(t0)) {
-                t0 = dotCoords.get(1);
-            }
+            Integer[] t0 = HLast.equals(dotCoords.get(0)) ? dotCoords.get(1) : dotCoords.get(0);
+            // Integer[] t0 = dotCoords.get(0);
+            // if (HLast.equals(t0)) {
+            //     t0 = dotCoords.get(1);
+            // }
             for (Integer[] t1 : dotCoords) {
                 if (t1.equals(HLast) || t1.equals(t0))
                     continue;

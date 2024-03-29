@@ -39,7 +39,7 @@ public class GiftWrapping extends Application {
 		pane.setOnMouseClicked(e -> {
 			// coordinates of click
 			int x = (int)e.getX();
-			int y = (int)e.getY();
+         int y = (int)e.getY();
 			
 			if (e.getButton() == MouseButton.PRIMARY && !isDuplicateDot(x, y)) {
 				placeDot(x, y, Color.BLACK);

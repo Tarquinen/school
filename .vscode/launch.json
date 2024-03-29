@@ -5,6 +5,13 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "type": "java",
+            "name": "GiftWrapping",
+            "request": "launch",
+            "mainClass": "GiftWrapping",
+            "projectName": "School-repo_45d59db"
+        },
+        {
             "name": "auto",
             "type": "auto-debug",
             "request": "launch",

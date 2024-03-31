@@ -12,7 +12,7 @@ public class project2 extends Application {
    public void start(Stage primaryStage) {
       PointPane pane = new PointPane(points);
       Scene scene = new Scene(pane, 500, 500);
-      primaryStage.setTitle("PointPane");
+      primaryStage.setTitle("Project 2");
       primaryStage.setScene(scene);
       primaryStage.show();
    }

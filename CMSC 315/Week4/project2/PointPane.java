@@ -23,7 +23,7 @@ public class PointPane extends Pane {
          placePoint(point);
       }
       paneClicked();
-      maximalList();
+      makeMaximalList();
    }
 
    // place a point on the pane
@@ -36,7 +36,7 @@ public class PointPane extends Pane {
          if (f.getButton() == MouseButton.SECONDARY) {
             this.getChildren().remove(point);
             points.remove(g);
-            maximalList();
+            makeMaximalList();
          }
       });
    }
@@ -50,15 +50,19 @@ public class PointPane extends Pane {
             GridPoint newPoint = new GridPoint(x, y);
             points.add(newPoint);
             placePoint(newPoint);
-            maximalList();
+            makeMaximalList();
          }
       });
    }
-
    
    // populate maximalPoints with the maximal list of points
-   private void maximalList() {
-      // sort the points in reverse order for easier accessibility
+   private void makeMaximalList() {
+      if (points.size() == 0) { // if there are no points, clear the pane
+         this.getChildren().clear();
+         return;
+      }
+
+      // sort the points in reverse x-axis order for easier accessibility
       Collections.sort(points, Collections.reverseOrder());
       
       // create list to store maximal points
@@ -72,10 +76,8 @@ public class PointPane extends Pane {
          GridPoint prevMaximalPoint = maximalPoints.get(maximalPointsIndex); // get the previous maximal point
          
          // check if the next point is on the same x coordinate and higher y, if so replace
-         if (point.getX() == prevMaximalPoint.getX()) {
-            if (point.getY() < prevMaximalPoint.getY()) { // < because y axis is inverted
-               maximalPoints.set(maximalPointsIndex, point);
-            }
+         if (point.getX() == prevMaximalPoint.getX() && point.getY() < prevMaximalPoint.getY()) { // < because y decreases as points go up
+            maximalPoints.set(maximalPointsIndex, point);
          }
          // otherwise, if its above the previous maximal point, add to the list
          else if (point.getY() < prevMaximalPoint.getY()) {

@@ -1,3 +1,11 @@
+/**
+ * Daniel Smolsky
+ * Programming Project 2 - Maximal Points
+ * March 31, 2024
+ * Represents a point on a 2D grid with x and y coordinates. This class provides methods to access the point's coordinates,
+ * compare it with other points based on the x-coordinate, and determine if it is below and to the left of another point.
+ */
+
 public class GridPoint implements Comparable<GridPoint> {
    private double x; // x-coordinate
    private double y; // y-coordinate

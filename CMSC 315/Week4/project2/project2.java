@@ -1,3 +1,10 @@
+/*
+ * Daniel Smolsky
+ * Programming Project 2 - Maximal Points
+ * March 31, 2024
+ * This class reads in points from a file and displays them on a graphical pane.
+ */
+
 import java.util.Scanner;
 import java.io.File;
 import java.io.FileNotFoundException;

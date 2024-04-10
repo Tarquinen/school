@@ -1,3 +1,11 @@
+/**
+ * Daniel Smolsky
+ * Programming Project 2 - Maximal Points
+ * March 31, 2024
+ * This class represents a pane for displaying points and handling interactions.
+ * It allows for the addition, removal, and visualization of points on a graphical pane.
+ */
+
 import javafx.scene.layout.Pane;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -72,7 +80,7 @@ public class PointPane extends Pane {
       // initial maximal point is the point with the highest x coordinate
       maximalPoints.add(points.get(0));
       
-      for (GridPoint point : points) { // this will iterate through the points in reverse x value order
+      for (GridPoint point : points) { // this will iterate through the points in highest to lowest x value
          GridPoint prevMaximalPoint = maximalPoints.get(maximalPointsIndex); // get the previous maximal point
          
          // check if the next point is on the same x coordinate and higher y, if so replace

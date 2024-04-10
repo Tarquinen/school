@@ -5,13 +5,6 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "type": "java",
-            "name": "GiftWrapping",
-            "request": "launch",
-            "mainClass": "GiftWrapping",
-            "projectName": "School-repo_45d59db"
-        },
-        {
             "name": "auto",
             "type": "auto-debug",
             "request": "launch",
@@ -31,6 +24,7 @@
             "name": "Java: Current File",
             "type": "java",
             "request": "launch",
+            "cwd": "${workspaceFolder}",
             "mainClass": "${file}",
             "console": "integratedTerminal",
             "vmArgs": "--module-path \"C:/Program Files/Java/javafx-sdk-21.0.2/lib\" --add-modules javafx.controls,javafx.fxml"

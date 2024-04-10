@@ -12,7 +12,7 @@ public class GiftWrapping extends Application {
 	static ArrayList<Integer[]> dotCoords = new ArrayList<Integer[]>(); // store all points
 	static ArrayList<Integer[]> H = new ArrayList<Integer[]>(); // store perimeter points
 	static Pane pane = new Pane();
-	static final int INITIAL_DOT_COUNT = 20;
+	static final int INITIAL_DOT_COUNT = 10;
 
 	public void start(Stage primaryStage) {
 		// create scene

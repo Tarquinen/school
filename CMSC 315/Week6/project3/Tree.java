@@ -17,8 +17,9 @@ public class Tree {
       }
    }
 
-   public Tree() {
-
+   public Tree(ArrayList<Integer> list) {
+      list.sort(null);
+      createTreeFromList(list, 0, list.size() - 1, 0);
    }
 
    public Tree (String s) throws InvalidInputSyntax {
@@ -66,6 +67,22 @@ public class Tree {
       validateList(branchList); // check the list has the correct number of nodes in each branch
       createTreeFromList(root, branchList, 0, 0); // create the tree from the list
       inorder(); // create the inorder list used to check if the tree is a binary search tree
+   }
+
+   private TreeNode createTreeFromList(ArrayList<Integer> list, int start, int end, int level) {
+      if (start > end) return null;
+      int mid = (start + end) / 2;
+      TreeNode node = createNewNode(list.get(mid));
+      node.level = level;
+      if (root == null) {
+         root = node;
+      }
+      // create left tree
+      node.left = createTreeFromList(list, start, mid - 1, level + 1);
+      // create right tree
+      node.right = createTreeFromList(list, mid + 1, end, level + 1);
+
+      return node;
    }
 
    // create the tree from the list of tree branches recursively

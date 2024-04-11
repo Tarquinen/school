@@ -2,7 +2,7 @@ import java.util.Stack;
 import java.util.ArrayList;
 
 public class Tree {
-   protected ArrayList<TreeNode> inorderList = new ArrayList<>(); // used to check if the tree is a binary search tree
+   protected ArrayList<Integer> inorderList = new ArrayList<>(); // used to check if the tree is a binary search tree
    protected TreeNode root;
    protected int size = 0;
 
@@ -36,7 +36,7 @@ public class Tree {
       
       for (String token : tokens) {
          // increase the tree branch for each left parenthesis and * symbol
-         if (token.equals("(") || token.equals("*")) {
+         if (token.equals("(")|| token.equals("*")) {
             treeBranch++;
          }
          else if (token.equals(")")) {
@@ -60,21 +60,21 @@ public class Tree {
 
       validateList(branchList); // check the list has the correct number of nodes in each branch
       createTreeFromList(branchList, 0, 0); // create the tree from the list starting at the root
-      inorder(); // create the inorder list used to check if the tree is a binary search tree
+      inorder(root); // create the inorder list used to check if the tree is a binary search tree
    }
    
    // create the tree from the list of integers recursively, used in the integer list constructor
-   private TreeNode createTreeFromList(ArrayList<Integer> list, int start, int end, int level) {
+   private TreeNode createTreeFromList(ArrayList<Integer> list, int start, int end, int branch) {
       if (start > end) return null;
       int mid = (start + end) / 2;
       TreeNode node = createNewNode(list.get(mid));
-      node.branch = level;
+      node.branch = branch;
       if (root == null) root = node;
       
       // create left tree
-      node.left = createTreeFromList(list, start, mid - 1, level + 1);
+      node.left = createTreeFromList(list, start, mid - 1, branch + 1);
       // create right tree
-      node.right = createTreeFromList(list, mid + 1, end, level + 1);
+      node.right = createTreeFromList(list, mid + 1, end, branch + 1);
 
       return node;
    }
@@ -91,7 +91,7 @@ public class Tree {
       for (int i = 0; i < parentIndex; i++)
          if (list.get(parentBranch).get(i) == null) nullCount ++; 
 
-      parentIndex -= nullCount;
+      parentIndex -= nullCount; // ignore the nulls in parent branch when calculating the child indexs because null nodes don't have children
       int childBranch = parentBranch + 1;
       int leftChildIndex = parentIndex * 2;
       int rightChildIndex = leftChildIndex + 1;
@@ -120,7 +120,7 @@ public class Tree {
    // check if the tree is a binary search tree
    public boolean isBinarySearchTree() {
       for (int i = 0; i < inorderList.size() - 1; i++) {
-         if (inorderList.get(i).element > inorderList.get(i + 1).element) {
+         if (inorderList.get(i) > inorderList.get(i + 1)) {
             return false;
          }
       }
@@ -153,17 +153,12 @@ public class Tree {
          return -1;
       return Math.max(getHeight(node.left), getHeight(node.right)) + 1;
    }
-
-   // helper method for inorder traversal
-   public void inorder() {
-      inorder(root);
-   }
    
    // create the inorder list of the tree used to check if the tree is a binary search tree
    protected void inorder(TreeNode node) {
       if (node == null) return;
       inorder(node.left);
-      inorderList.add(node);
+      inorderList.add(node.element);
       inorder(node.right);
    }
 
@@ -185,11 +180,7 @@ public class Tree {
 
    // return an array list of the values in the tree
    public ArrayList<Integer> getInorderList() {
-      ArrayList<Integer> result = new ArrayList<>();
-      for (TreeNode node : inorderList) {
-         result.add(node.element);
-      }
-      return result;
+      return inorderList;
    }
 
    // convert a string to an integer, or return null if the string is not an integer, used in constructor
@@ -203,7 +194,7 @@ public class Tree {
    }
 
    // convert a string to an array of tokens
-   private static String[] parseStringToArray(String s) {
+   private String[] parseStringToArray(String s) {
       StringBuilder sb = new StringBuilder();
       ArrayList<String> result = new ArrayList<>();
       
@@ -266,7 +257,7 @@ public class Tree {
    }
 
    // used in the constructor
-   protected void validateList(ArrayList<ArrayList<Integer>> list) throws InvalidInputSyntax {
+   private void validateList(ArrayList<ArrayList<Integer>> list) throws InvalidInputSyntax {
       if (list.get(0).size() != 1)
          throw new InvalidInputSyntax("Root branch should have 1 Node");
    

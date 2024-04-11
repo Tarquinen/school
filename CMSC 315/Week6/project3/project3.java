@@ -12,7 +12,7 @@ public class project3 {
          System.out.print("Enter a binary tree: ");
          String s = input.nextLine();
 
-         Tree tree = new Tree(testString3);
+         Tree tree = new Tree(testString4);
 
          tree.printTree();
 

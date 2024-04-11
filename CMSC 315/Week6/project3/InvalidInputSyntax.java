@@ -1,14 +1,15 @@
-public class InvalidInputSyntax extends Exception{
+public class InvalidInputSyntax extends Exception {
    private String message;
+
+   public InvalidInputSyntax() {
+      this("Invalid syntax");
+   }
 
    public InvalidInputSyntax(String message) {
       super(message);
       this.message = message;
    }
 
-   public InvalidInputSyntax() {
-      this("Invalid syntax");
-   }
 
    @Override
    public String getMessage() {

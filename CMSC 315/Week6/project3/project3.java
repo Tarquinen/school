@@ -1,5 +1,4 @@
 import java.util.Scanner;
-import java.util.ArrayList;
 
 public class project3 {
    public static void main(String[] args) throws InvalidInputSyntax {
@@ -13,9 +12,8 @@ public class project3 {
          System.out.print("Enter a binary tree: ");
          String s = input.nextLine();
 
-         Tree tree = new Tree(s);
+         Tree tree = new Tree(testString3);
 
-         // print the tree
          tree.printTree();
 
          if (tree.isBinarySearchTree()) {

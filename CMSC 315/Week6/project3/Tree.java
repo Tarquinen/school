@@ -2,13 +2,13 @@ import java.util.Stack;
 import java.util.ArrayList;
 
 public class Tree {
-   protected ArrayList<TreeNode> inorderList = new ArrayList<>();
+   protected ArrayList<TreeNode> inorderList = new ArrayList<>(); // used to check if the tree is a binary search tree
    protected TreeNode root;
    protected int size = 0;
 
    public static class TreeNode {
       protected int element;
-      protected int level;
+      protected int branch; // used for printing the tree
       protected TreeNode left;
       protected TreeNode right;
 
@@ -17,30 +17,24 @@ public class Tree {
       }
    }
 
+   // constructor for creating a balanced binary search tree from a list of integers
    public Tree(ArrayList<Integer> list) {
       list.sort(null);
       createTreeFromList(list, 0, list.size() - 1, 0);
    }
-
+   
+   // constructor for creating a tree from a string
    public Tree (String s) throws InvalidInputSyntax {
       validateString(s); // check the string isn't missing parenthesis and only has integers
-
+      
       // convert the string to an array of tokens
       String[] tokens = parseStringToArray(s);
-
+      
       // create a list of branches in the tree with each branch containing a list of integers
       int treeBranch = 0;
       ArrayList<ArrayList<Integer>> branchList = new ArrayList<>();
-
+      
       for (String token : tokens) {
-         // create the root node
-         if (root == null) {
-            Integer value = toNumber(token);
-            if (value != null) {
-               root = createNewNode(value);
-            }
-         }
-         
          // increase the tree branch for each left parenthesis and * symbol
          if (token.equals("(") || token.equals("*")) {
             treeBranch++;
@@ -53,7 +47,7 @@ public class Tree {
          if (branchList.size() < treeBranch) {
             branchList.add(new ArrayList<Integer>());
          }
-
+         
          // add the token to the list at the current branch 
          if (token.equals("*")) {
             branchList.get(treeBranch - 1).add(null);
@@ -65,18 +59,18 @@ public class Tree {
       }
 
       validateList(branchList); // check the list has the correct number of nodes in each branch
-      createTreeFromList(root, branchList, 0, 0); // create the tree from the list
+      createTreeFromList(branchList, 0, 0); // create the tree from the list starting at the root
       inorder(); // create the inorder list used to check if the tree is a binary search tree
    }
-
+   
+   // create the tree from the list of integers recursively, used in the integer list constructor
    private TreeNode createTreeFromList(ArrayList<Integer> list, int start, int end, int level) {
       if (start > end) return null;
       int mid = (start + end) / 2;
       TreeNode node = createNewNode(list.get(mid));
-      node.level = level;
-      if (root == null) {
-         root = node;
-      }
+      node.branch = level;
+      if (root == null) root = node;
+      
       // create left tree
       node.left = createTreeFromList(list, start, mid - 1, level + 1);
       // create right tree
@@ -85,44 +79,42 @@ public class Tree {
       return node;
    }
 
-   // create the tree from the list of tree branches recursively
-   private void createTreeFromList(TreeNode parentNode, ArrayList<ArrayList<Integer>> inputList, 
-                                    int parentCoordslevel, int parentCoordsSlot) {
+   // create the tree from the list of branches representation recursively, used in the string constructor
+   private TreeNode createTreeFromList(ArrayList<ArrayList<Integer>> list, int parentBranch, int parentIndex) {
+      // create a new node with the parent branch and index
+      TreeNode node = createNewNode(list.get(parentBranch).get(parentIndex));
+      node.branch = parentBranch;
+      if (root == null) root = node;
 
-      // count the number of nulls in the parent's row
+      // count the number of nulls before the parent in the branch 
       int nullCount = 0;
-      for (int i = 0; i < parentCoordsSlot; i++) {
-         if (inputList.get(parentCoordslevel).get(i) == null) {
-            nullCount++;
-         }
+      for (int i = 0; i < parentIndex; i++)
+         if (list.get(parentBranch).get(i) == null) nullCount ++; 
+
+      parentIndex -= nullCount;
+      int childBranch = parentBranch + 1;
+      int leftChildIndex = parentIndex * 2;
+      int rightChildIndex = leftChildIndex + 1;
+
+      // check if the left child exists and is not null
+      if (list.size() > childBranch && 
+         list.get(childBranch).size() > leftChildIndex && 
+         list.get(childBranch).get(leftChildIndex) != null) {
+
+         // recursively create a new left subtree 
+         node.left = createTreeFromList(list, childBranch, leftChildIndex);
+      }
+      
+      // check if the right child exists and is not null
+      if (list.size() > childBranch && 
+         list.get(childBranch).size() > rightChildIndex && 
+         list.get(childBranch).get(rightChildIndex) != null) {
+
+         // recursively create a new right subtree
+         node.right = createTreeFromList(list, childBranch, rightChildIndex);
       }
 
-      parentCoordsSlot -= nullCount;
-      int childCoordsLevel = parentCoordslevel + 1;
-      int leftChildSlot = parentCoordsSlot * 2;
-      int rightChildSlot = leftChildSlot + 1;
-
-      // recursively create the tree from the list
-      try {
-         int leftChildElement = inputList.get(childCoordsLevel).get(leftChildSlot); // throws error if child is null or doesn't exist
-         TreeNode leftChildNode = createNewNode(leftChildElement);
-         leftChildNode.level = childCoordsLevel;
-         parentNode.left = leftChildNode;
-         createTreeFromList(leftChildNode, inputList, childCoordsLevel, leftChildSlot);
-      }
-      catch (IndexOutOfBoundsException | NullPointerException e) {
-      }
-
-      try {
-         int rightChildElement = inputList.get(childCoordsLevel).get(rightChildSlot);
-         TreeNode rightChildNode = createNewNode(rightChildElement);
-         rightChildNode.level = childCoordsLevel;
-         parentNode.right = rightChildNode;
-         createTreeFromList(rightChildNode, inputList, childCoordsLevel, rightChildSlot);
-      }
-      catch (IndexOutOfBoundsException | NullPointerException e) {
-      }
-
+      return node;
    }
 
    // check if the tree is a binary search tree
@@ -141,13 +133,13 @@ public class Tree {
    }
 
    // check if the tree is balanced recursively
-   protected boolean isBalanced(TreeNode root) {
-      if (root == null) return true;
-      int leftHeight = getHeight(root.left);
-      int rightHeight = getHeight(root.right);
+   protected boolean isBalanced(TreeNode node) {
+      if (node == null) return true;
+      int leftHeight = getHeight(node.left);
+      int rightHeight = getHeight(node.right);
 
       if (Math.abs(leftHeight - rightHeight) > 1) return false;
-      return isBalanced(root.left) && isBalanced(root.right);
+      return isBalanced(node.left) && isBalanced(node.right);
    }
 
    // helper method for getting the height of the tree
@@ -156,24 +148,23 @@ public class Tree {
    }
 
    // get the height of the tree recursively
-   protected int getHeight(TreeNode root) {
-      if (root == null)
+   protected int getHeight(TreeNode node) {
+      if (node == null)
          return -1;
-      return Math.max(getHeight(root.left), getHeight(root.right)) + 1;
+      return Math.max(getHeight(node.left), getHeight(node.right)) + 1;
    }
 
    // helper method for inorder traversal
    public void inorder() {
-      inorderList.clear();
       inorder(root);
    }
    
    // create the inorder list of the tree used to check if the tree is a binary search tree
-   protected void inorder(TreeNode root) {
-      if (root == null) return;
-      inorder(root.left);
-      inorderList.add(root);
-      inorder(root.right);
+   protected void inorder(TreeNode node) {
+      if (node == null) return;
+      inorder(node.left);
+      inorderList.add(node);
+      inorder(node.right);
    }
 
    // helper method for printing the tree
@@ -182,14 +173,14 @@ public class Tree {
    }
 
    //prints the visual representation of the tree
-   protected void printTree(TreeNode root) {
-      if (root == null) return;
-      for (int i = 0; i < root.level; i++) {
+   protected void printTree(TreeNode node) {
+      if (node == null) return;
+      for (int i = 0; i < node.branch; i++) { // apply the correct number of branches for the branch
          System.out.print("   ");
       }
-      System.out.println(root.element);
-      printTree(root.left);
-      printTree(root.right);
+      System.out.println(node.element);
+      printTree(node.left);
+      printTree(node.right);
    }
 
    // return an array list of the values in the tree
@@ -275,27 +266,27 @@ public class Tree {
    }
 
    // used in the constructor
-   protected void validateList(ArrayList<ArrayList<Integer>> TreeList) throws InvalidInputSyntax {
-      if (TreeList.get(0).size() != 1)
+   protected void validateList(ArrayList<ArrayList<Integer>> list) throws InvalidInputSyntax {
+      if (list.get(0).size() != 1)
          throw new InvalidInputSyntax("Root branch should have 1 Node");
    
-      for (int i = 0; i < TreeList.size() - 1; i++) {
+      for (int i = 0; i < list.size() - 1; i++) {
          // get the num of elements in the branch that are not null
          int notNull = 0;
-         for (int j = 0; j < TreeList.get(i).size(); j++) 
-            if (TreeList.get(i).get(j) != null) notNull ++; 
+         for (int j = 0; j < list.get(i).size(); j++) 
+            if (list.get(i).get(j) != null) notNull ++; 
    
          // check the next branch has twice as many elements
-         if (notNull * 2 > TreeList.get(i + 1).size()) {
+         if (notNull * 2 > list.get(i + 1).size()) {
             throw new InvalidInputSyntax("Branch " + (i + 1) + " is missing nodes");
          }
-         else if (notNull * 2 < TreeList.get(i + 1).size()) {
+         else if (notNull * 2 < list.get(i + 1).size()) {
             throw new InvalidInputSyntax("Branch " + (i + 1) + " has extra nodes");
          }
       }
    }
 
-   // used in the constructor to create a new node
+   // used to create a new node
    protected TreeNode createNewNode(int e) {
       return new TreeNode(e);
    }

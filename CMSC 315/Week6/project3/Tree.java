@@ -31,30 +31,30 @@ public class Tree {
       String[] tokens = parseStringToArray(s);
       
       // create a list of branches in the tree with each branch containing a list of integers
-      int treeBranch = 0;
+      int branch = 0;
       ArrayList<ArrayList<Integer>> branchList = new ArrayList<>();
       
       for (String token : tokens) {
          // increase the tree branch for each left parenthesis and * symbol
          if (token.equals("(")|| token.equals("*")) {
-            treeBranch++;
+            branch++;
          }
          else if (token.equals(")")) {
-            treeBranch--;
+            branch--;
          }
          
          // if there are not enough branches in the list, add a new level
-         if (branchList.size() < treeBranch) {
+         if (branchList.size() < branch) {
             branchList.add(new ArrayList<Integer>());
          }
          
          // add the token to the list at the current branch 
          if (token.equals("*")) {
-            branchList.get(treeBranch - 1).add(null);
-            treeBranch--; // decrease back down to the parent branch 
+            branchList.get(branch - 1).add(null);
+            branch--; // decrease back down to the parent branch 
          }
          else if (toNumber(token) != null) {
-            branchList.get(treeBranch - 1).add(toNumber(token));
+            branchList.get(branch - 1).add(toNumber(token));
          }
       }
 
@@ -97,24 +97,23 @@ public class Tree {
       int rightChildIndex = leftChildIndex + 1;
 
       // check if the left child exists and is not null
-      if (list.size() > childBranch && 
-         list.get(childBranch).size() > leftChildIndex && 
-         list.get(childBranch).get(leftChildIndex) != null) {
-
+      if (hasChild(list, childBranch, leftChildIndex)) {
          // recursively create a new left subtree 
          node.left = createTreeFromList(list, childBranch, leftChildIndex);
       }
       
       // check if the right child exists and is not null
-      if (list.size() > childBranch && 
-         list.get(childBranch).size() > rightChildIndex && 
-         list.get(childBranch).get(rightChildIndex) != null) {
-
+      if (hasChild(list, childBranch, rightChildIndex)) {
          // recursively create a new right subtree
          node.right = createTreeFromList(list, childBranch, rightChildIndex);
       }
 
       return node;
+   }
+
+   // check if an element exists in a branch and index
+   private boolean hasChild(ArrayList<ArrayList<Integer>> list, int branch, int index) {
+      return list.size() > branch && list.get(branch).size() > index && list.get(branch).get(index) != null;
    }
 
    // check if the tree is a binary search tree
@@ -170,7 +169,7 @@ public class Tree {
    //prints the visual representation of the tree
    protected void printTree(TreeNode node) {
       if (node == null) return;
-      for (int i = 0; i < node.branch; i++) { // apply the correct number of branches for the branch
+      for (int i = 0; i < node.branch + 1; i++) { // apply the correct number of spaces for the branch
          System.out.print("   ");
       }
       System.out.println(node.element);
@@ -245,7 +244,7 @@ public class Tree {
             throw new InvalidInputSyntax("Data is Not an Integer");
          }
       }
-      // if the stack is not empty, then there is a missing parenthesis
+      // if the stack is not empty after iterating through the string, then there is a missing parenthesis
       if (!stack.isEmpty()) {
          if (stack.pop() == ')') {
             throw new InvalidInputSyntax("Missing Left Parenthesis");

@@ -490,7 +490,7 @@ class TwoWayLinkedList<E> implements MyList<E> {
          tail = tail.previous;
          size--;
          if (tail == null) {
-            tail = null;
+            head = null;
          }
          return temp;
       }

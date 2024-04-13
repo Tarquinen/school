@@ -43,7 +43,7 @@ public class Tree {
             branch--;
          }
          
-         // if there are not enough branches in the list, add a new level
+         // if there are not enough branches in the list, add a new branch
          if (branchList.size() < branch) {
             branchList.add(new ArrayList<Integer>());
          }
@@ -71,42 +71,40 @@ public class Tree {
       node.branch = branch;
       if (root == null) root = node;
       
-      // create left tree
+      // recursively create a left subtree 
       node.left = createTreeFromList(list, start, mid - 1, branch + 1);
-      // create right tree
+      // recursively create a right subtree
       node.right = createTreeFromList(list, mid + 1, end, branch + 1);
 
       return node;
    }
 
    // create the tree from the list of branches representation recursively, used in the string constructor
-   private TreeNode createTreeFromList(ArrayList<ArrayList<Integer>> list, int parentBranch, int parentIndex) {
-      // create a new node with the parent branch and index
-      TreeNode node = createNewNode(list.get(parentBranch).get(parentIndex));
-      node.branch = parentBranch;
+   private TreeNode createTreeFromList(ArrayList<ArrayList<Integer>> list, int currentBranch, int currentIndex) {
+      // create a new node with the current branch and index
+      TreeNode node = createNewNode(list.get(currentBranch).get(currentIndex));
+      node.branch = currentBranch;
       if (root == null) root = node;
 
-      // count the number of nulls before the parent in the branch 
+      // count the number of nulls before current in the branch 
       int nullCount = 0;
-      for (int i = 0; i < parentIndex; i++)
-         if (list.get(parentBranch).get(i) == null) nullCount ++; 
+      for (int i = 0; i < currentIndex; i++)
+         if (list.get(currentBranch).get(i) == null) nullCount ++; 
 
-      parentIndex -= nullCount; // ignore the nulls in parent branch when calculating the child indexs because null nodes don't have children
-      int childBranch = parentBranch + 1;
-      int leftChildIndex = parentIndex * 2;
+      currentIndex -= nullCount; // ignore the nulls in the current branch when calculating the child indexs because null nodes don't have children
+      int childBranch = currentBranch + 1;
+      int leftChildIndex = currentIndex * 2;
       int rightChildIndex = leftChildIndex + 1;
 
       // check if the left child exists and is not null
-      if (hasChild(list, childBranch, leftChildIndex)) {
-         // recursively create a new left subtree 
+      if (hasChild(list, childBranch, leftChildIndex)) 
+         // recursively create a left subtree 
          node.left = createTreeFromList(list, childBranch, leftChildIndex);
-      }
       
       // check if the right child exists and is not null
-      if (hasChild(list, childBranch, rightChildIndex)) {
-         // recursively create a new right subtree
+      if (hasChild(list, childBranch, rightChildIndex))
+         // recursively create a right subtree
          node.right = createTreeFromList(list, childBranch, rightChildIndex);
-      }
 
       return node;
    }

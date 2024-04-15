@@ -468,6 +468,7 @@ class TwoWayLinkedList<E> implements MyList<E> {
       else {
          E temp = head.element;
          head = head.next;
+         head.previous = null;
          size --;
          if (head == null) {
             tail = null;
@@ -488,6 +489,7 @@ class TwoWayLinkedList<E> implements MyList<E> {
       else { 
          E temp = tail.element;
          tail = tail.previous;
+         tail.next = null;
          size--;
          if (tail == null) {
             head = null;
@@ -518,6 +520,7 @@ class TwoWayLinkedList<E> implements MyList<E> {
          }
          Node<E> current = previous.next;
          previous.next = current.next;
+         current.next.previous = previous;
          size--;
          return current.element;
       }
@@ -528,6 +531,7 @@ class TwoWayLinkedList<E> implements MyList<E> {
          }
          Node<E> current = next.previous;
          next.previous = current.previous;
+         current.previous.next = next;
          size--;
          return current.element;
       }

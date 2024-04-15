@@ -1,3 +1,14 @@
+/**
+ * Daniel Smolsky
+ * Programming Project 3 - Binary Search Tree
+ * March 15, 2024
+ * The project3 class is the main entry point for the binary search tree project.
+ * It allows the user to input a string representation of a binary tree and
+ * determines whether the tree is a balanced binary search tree, an unbalanced
+ * binary search tree, or not a binary search tree at all. It also prints the
+ * original tree and a balanced version of the tree if necessary.
+ */
+
 import java.util.Scanner;
 
 public class project3 {

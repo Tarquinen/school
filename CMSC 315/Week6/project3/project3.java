@@ -13,10 +13,6 @@ import java.util.Scanner;
 
 public class project3 {
    public static void main(String[] args) throws InvalidInputSyntax {
-      String testString1 = "(53 (28 (11 * *) (41 * *)) (83 (67 * *) *))";
-      String testString2 = "(63 (51 (20 (13 * *) *) *) *)";
-      String testString3 = "(13 (53 * *) (11 (59 * *) *))";
-      String testString4 = "(53 * (83 (67 * *) *))";
 
       while (true) {
          Scanner input = new Scanner(System.in);

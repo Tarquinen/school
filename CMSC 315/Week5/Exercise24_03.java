@@ -16,7 +16,7 @@ public class Exercise24_03 {
       Scanner input = new Scanner(System.in);
       double[] v = new double[5];
       for (int i = 0; i < 5; i++) 
-      v[i] = input.nextDouble();
+         v[i] = input.nextDouble();
 
       list.add(v[1]);
       list.add(v[2]);

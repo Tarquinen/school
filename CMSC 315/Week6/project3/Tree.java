@@ -1,3 +1,12 @@
+/**
+ * Daniel Smolsky
+ * Programming Project 3 - Binary Search Tree
+ * March 15, 2024
+ * The Tree class represents a binary tree data structure. It provides methods for creating a balanced binary search tree from a list of integers, 
+ * constructing a tree from a string representation, and performing various operations on the tree such as checking if it is a binary search tree, 
+ * checking if it is balanced, and printing the tree.
+ */
+
 import java.util.Stack;
 import java.util.ArrayList;
 

@@ -16,6 +16,9 @@ public class project4 extends Application{
    private TextField tfVertex1 = new TextField(); 
    private Label lbVertex2 = new Label("Vertex 2");
    private TextField tfVertex2 = new TextField();
+   private Label lbLeftMouseAction = new Label("Left Mouse Click:");
+   private Button btNewVertex = new Button("New Vertex");
+   private Button btConnectVertices = new Button("Connect Vertices");
    private Button btIsConnected = new Button("Is Connected?");
    private Button btHasCycles = new Button("Has Cycles?");
    private Button btDepthFirstSearch = new Button("Depth First Search");
@@ -72,6 +75,7 @@ public class project4 extends Application{
             if (tfV.equals(name)) foundVertex2 = true;
             if (foundVertex1 && foundVertex2) break;
          }
+
          if (!foundVertex1 && !foundVertex2) {
             tfResult.setText("Neither vertex found in the graph");
             return;
@@ -92,7 +96,6 @@ public class project4 extends Application{
          else {
             tfResult.setText("Edge already exists");
          }
-         // graphPane.drawEdge(u, v);
       });
 
 
@@ -105,7 +108,7 @@ public class project4 extends Application{
 
 
 
-      Scene scene = new Scene(pane, 500, 500);
+      Scene scene = new Scene(pane, 600, 500);
       primaryStage.setTitle("Project 4");
       primaryStage.setScene(scene);
       primaryStage.show();

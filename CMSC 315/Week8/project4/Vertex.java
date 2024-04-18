@@ -10,6 +10,13 @@ public class Vertex {
       count++;
    }
 
+   // temp vertex for comparison, does not increment count
+   public Vertex(double x, double y, String name) {
+      this.x = x;
+      this.y = y;
+      this.name = name;
+   }
+
    public double getX() {
       return x;
    }

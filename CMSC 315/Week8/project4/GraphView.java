@@ -13,51 +13,80 @@ import java.util.HashMap;
 public class GraphView extends Pane {
    private Graph graph;
    private Map<String, Line> lineMap = new HashMap<>();
+   private int vertex1 = -1;
+   private int vertex2 = -1;
+   Line draggingLine = new Line(); 
 
    public GraphView() {
       this.graph = new Graph();
-      paneClicked();
+      initializeMouseEventHandlers();
    }
    
    public GraphView(Graph graph) {
       this.graph = graph;
-      paneClicked();
-
-   }
-   
-   private void repaintGraph() {
-      // group.getChildren().clear();
+      initializeMouseEventHandlers();
    }
 
-   private void paneClicked() {
-      this.setOnMouseClicked(e -> {
-         // if the left mouse button is clicked
-         if (e.getButton() == MouseButton.PRIMARY) {
-            double x = e.getX();
-            double y = e.getY();
-            // if the click is not inside an existing vertex, add a new vertex
-            if (!isInsideCircle(new Point2D(x, y))) {
-               Vertex vertex = new Vertex(x, y);
-               graph.addVertex(vertex);
-               Circle circle = new Circle(x, y, 5);
-               Text text = new Text(x - 5, y - 10, vertex.getName());
-               this.getChildren().add(circle);
-               this.getChildren().add(text);
-               text.toBack(); 
-               circle.setOnMouseClicked(f -> {
-                  // if the right mouse button is clicked on a vertex, remove the vertex and its edges
-                  if (f.getButton() == MouseButton.SECONDARY) {
-                     this.getChildren().remove(circle);
-                     this.getChildren().remove(text);
-                     eraseEdgesOfVertex(vertex); // erase all edges of the vertex from the pane
-                     graph.removeVertex(vertex); // remove the vertex from the graph and its edges
-                  }
-               });
-            }
+   private void initializeMouseEventHandlers() {
+      this.setOnMousePressed(e -> {
+         vertex1 = getVertexIndex(new Point2D(e.getX(), e.getY())); // returns an index if clicking a vertex, -1 otherwise
+         if (vertex1 != -1 && e.getButton() == MouseButton.PRIMARY) {
+            draggingLine.setStartX(graph.getVertex(vertex1).getX());
+            draggingLine.setStartY(graph.getVertex(vertex1).getY());
+            draggingLine.setEndX(e.getX());
+            draggingLine.setEndY(e.getY());
+            this.getChildren().add(draggingLine);
+         }
+      });
+
+      this.setOnMouseReleased(e -> {
+         vertex2 = getVertexIndex(new Point2D(e.getX(), e.getY())); // reprents the vertex where the mouse is released, -1 if not on a vertex
+         // if the click starts and ends on a vertex, add an edge between the two vertices
+         if (vertex1 != -1 && vertex2 != -1 && e.getButton() == MouseButton.PRIMARY) {
+            graph.addEdge(vertex1, vertex2);
+            drawEdge(vertex1, vertex2);
+            this.getChildren().remove(draggingLine);
+         }
+         // if the click doesn't start on a vertex and doesn't end on a vertex, add a new vertex
+         else if (vertex1 == -1 && vertex2 == -1 && e.getButton() == MouseButton.PRIMARY) {
+            this.getChildren().remove(draggingLine);
+            addVertex(e.getX(), e.getY());
+         }
+         // if the click starts on a vertex and ends on a blank space, remove the dragging line
+         else {
+            this.getChildren().remove(draggingLine);
+         }
+      });
+
+      this.setOnMouseDragged(e -> {
+         if (vertex1 != -1 && e.getButton() == MouseButton.PRIMARY) {
+            draggingLine.setEndX(e.getX());
+            draggingLine.setEndY(e.getY());
          }
       });
    }
 
+   // adds a vertex to the pane and the graph
+   private void addVertex(double x, double y) {
+      Vertex vertex = new Vertex(x, y);
+      graph.addVertex(vertex);
+      Circle circle = new Circle(x, y, 5);
+      Text text = new Text(x - 5, y - 10, vertex.getName());
+      this.getChildren().add(circle);
+      this.getChildren().add(text);
+      text.toBack(); 
+      circle.setOnMouseClicked(f -> {
+         // if the right mouse button is clicked on a vertex, remove the vertex and its edges
+         if (f.getButton() == MouseButton.SECONDARY) {
+            this.getChildren().remove(circle);
+            this.getChildren().remove(text);
+            eraseEdgesOfVertex(vertex); // erase all edges of the vertex from the pane
+            graph.removeVertex(vertex); // remove the vertex from the graph and its edges
+         }
+      });
+   }
+
+   // erases all edges of a vertex from the pane
    public void eraseEdgesOfVertex(Vertex v) {
       int vertex = graph.getIndex(v);
       // get the neighbors of the vertex
@@ -68,6 +97,7 @@ public class GraphView extends Pane {
       }
    }
 
+   // erases an edge from the pane
    public void eraseEdge(int u, int v) {
       // create a key for the line map
       String key = createKey(u, v);
@@ -79,6 +109,7 @@ public class GraphView extends Pane {
       }
    }
 
+   // draws an edge between two vertices
    public boolean drawEdge(int u, int v) {
       // create a key for the line map
       String key = createKey(u, v);
@@ -92,8 +123,18 @@ public class GraphView extends Pane {
       
       // draw the line and add it to the pane
       Line line = new Line(U.getX(), U.getY(), V.getX(), V.getY());
+      line.setStrokeWidth(3);
       this.getChildren().add(line);
       line.toBack();
+
+      // if the right mouse button is clicked on a line, remove the line
+      line.setOnMouseClicked(e -> {
+         if (e.getButton() == MouseButton.SECONDARY) {
+            this.getChildren().remove(line);
+            lineMap.remove(key);
+            graph.removeEdge(u, v);
+         }
+      });
       
       // add the line to the map
       lineMap.put(key, line);
@@ -105,7 +146,7 @@ public class GraphView extends Pane {
       int smaller = Math.min(u, v);
       int larger = Math.max(u, v);
       return smaller + " " + larger;
-   }
+   }   
 
    // removes all edges and redraws them (not used keep for reference)
    private void redrawEdges() {
@@ -123,13 +164,15 @@ public class GraphView extends Pane {
       }
    }
 
-   private boolean isInsideCircle(Point2D p) {
+   private int getVertexIndex(Point2D p) {
       for (Node circle: this.getChildren()) {
-         if (circle.contains(p)) {
-            System.out.println("existing circle clicked");
-            return true;
+         if (circle instanceof Circle && circle.contains(p)) {
+            double x = ((Circle)circle).getCenterX();
+            double y = ((Circle)circle).getCenterY();
+            int index = graph.getIndex(x, y);
+            return index;
          }
       }
-      return false;
+      return -1;
    }
 }

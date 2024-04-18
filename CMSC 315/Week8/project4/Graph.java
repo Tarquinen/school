@@ -61,6 +61,10 @@ public class Graph {
       return false;
    }
    
+   public boolean addEdge(int u, int v) {
+      return addEdge(new Edge(u, v));
+   }
+
    public boolean addEdge(Edge e) {
       if (e.u < 0 || e.u > getSize() - 1)
          throw new IllegalArgumentException("No such index: " + e.u);
@@ -73,6 +77,10 @@ public class Graph {
          return true;
       }
       else return false;
+   }
+
+   public boolean removeEdge(int u, int v) {
+      return removeEdge(new Edge(u, v));
    }
 
    public boolean removeEdge(Edge e) {
@@ -105,17 +113,10 @@ public class Graph {
       return removed;
    }
 
-
-
    private void createAdjacencyList(int[][] edges, int numberOfVertices) {
       for (int i = 0; i < edges.length; i++)
          addEdge(edges[i][0], edges[i][1]);
    }
-
-   public boolean addEdge(int u, int v) {
-      return addEdge(new Edge(u, v));
-   }
-
 
    public int getSize() {
       return vertices.size();
@@ -130,7 +131,23 @@ public class Graph {
    }
 
    public int getIndex(Vertex v) {
-      return vertices.indexOf(v);
+      for (int i = 0; i < vertices.size(); i++) {
+         if (vertices.get(i) == null) continue;
+         if (vertices.get(i).getX() == v.getX() && vertices.get(i).getY() == v.getY()) {
+               return i;
+         }
+      }
+      return -1;
+   }
+
+   public int getIndex(double x, double y) {
+      for (int i = 0; i < vertices.size(); i++) {
+         if (vertices.get(i) == null) continue;
+         if (vertices.get(i).getX() == x && vertices.get(i).getY() == y) {
+               return i;
+         }
+      }
+      return -1;
    }
 
    public List<Integer> getNeighbors(int index) {

@@ -60,7 +60,6 @@ public class project4 extends Application{
          String tfV = tfVertex2.getText().toUpperCase();
          int u = stringValue(tfU);
          int v = stringValue(tfV);
-         System.out.println(u + " " + v);
          if (u == v) {
             tfResult.setText("Cannot add an edge to itself");
             return;
@@ -86,8 +85,14 @@ public class project4 extends Application{
             return;
          }
 
-         graph.addEdge(u, v);
-         graphPane.drawEdge(u, v);
+         if (graph.addEdge(u, v)) {
+            tfResult.clear();
+            graphPane.drawEdge(u, v);
+         }
+         else {
+            tfResult.setText("Edge already exists");
+         }
+         // graphPane.drawEdge(u, v);
       });
 
 

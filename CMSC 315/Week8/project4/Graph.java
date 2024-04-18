@@ -42,7 +42,6 @@ public class Graph {
          vertices.add(v);
          names.add(v.getName());
          neighbors.add(new ArrayList<Edge>());
-         System.out.println("vertice index: " + getIndex(v));
          return true;
       }
       else return false;
@@ -51,27 +50,12 @@ public class Graph {
    public boolean removeVertex(Vertex v) {
       if (vertices.contains(v)) {
          int index = getIndex(v);
-         System.out.println("removing vertice at index: " + getIndex(v) + " named " + v.getName());
          List<Edge> edges = new ArrayList<>(neighbors.get(index)); // Copy to avoid ConcurrentModificationException
             for (Edge e : edges) {
                removeEdge(e);
             }
          vertices.set(index, null);
-         
-         // print out the vertices and neighbors
-         System.out.println("vertices: ");
-         for (Vertex vertex: vertices) {
-            if (vertex != null) {
-               System.out.println(vertex);
-            }
-            else {
-               System.out.println("vertex removed");
-            }
-         }
-         System.out.println("neighbors: ");
-         for (List<Edge> neighbor: neighbors) {
-            System.out.println(neighbor);
-         }
+         names.remove(v.getName());
          return true;
       }
       return false;
@@ -103,19 +87,16 @@ public class Graph {
          Edge current = it.next();
          if (current.equals(e)) {
             it.remove();
-            System.out.println("removing edge: " + e + " success");
             removed = true;
             break;
          }
       }
-
       if (removed) {
          Iterator<Edge> reverseIt = neighbors.get(e.v).iterator();
          while (reverseIt.hasNext()) {
             Edge reverseEdge = reverseIt.next();
             if (reverseEdge.u == e.v && reverseEdge.v == e.u) {
                reverseIt.remove();
-               System.out.println("removing reverse edge: " + reverseEdge + " success");
                break;
             }
          }

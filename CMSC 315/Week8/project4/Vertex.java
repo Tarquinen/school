@@ -8,7 +8,6 @@ public class Vertex {
       this.y = y;
       this.name = generateName();
       count++;
-      System.out.println("Vertex " + name + " created at (" + x + ", " + y + ")");
    }
 
    public double getX() {

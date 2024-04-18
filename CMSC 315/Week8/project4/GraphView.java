@@ -12,16 +12,16 @@ import java.util.HashMap;
 
 public class GraphView extends Pane {
    private Graph graph;
-   private Map<String, Line> edgeLines = new HashMap<>();
+   private Map<String, Line> lineMap = new HashMap<>();
 
    public GraphView() {
-      paneClicked();
       this.graph = new Graph();
+      paneClicked();
    }
    
    public GraphView(Graph graph) {
-      this();
       this.graph = graph;
+      paneClicked();
 
    }
    
@@ -31,9 +31,11 @@ public class GraphView extends Pane {
 
    private void paneClicked() {
       this.setOnMouseClicked(e -> {
+         // if the left mouse button is clicked
          if (e.getButton() == MouseButton.PRIMARY) {
             double x = e.getX();
             double y = e.getY();
+            // if the click is not inside an existing vertex, add a new vertex
             if (!isInsideCircle(new Point2D(x, y))) {
                Vertex vertex = new Vertex(x, y);
                graph.addVertex(vertex);
@@ -41,14 +43,14 @@ public class GraphView extends Pane {
                Text text = new Text(x - 5, y - 10, vertex.getName());
                this.getChildren().add(circle);
                this.getChildren().add(text);
-               text.toBack();
+               text.toBack(); 
                circle.setOnMouseClicked(f -> {
+                  // if the right mouse button is clicked on a vertex, remove the vertex and its edges
                   if (f.getButton() == MouseButton.SECONDARY) {
                      this.getChildren().remove(circle);
                      this.getChildren().remove(text);
-                     eraseEdgesOfVertex(vertex);
-                     graph.removeVertex(vertex);
-                     // redrawEdges();
+                     eraseEdgesOfVertex(vertex); // erase all edges of the vertex from the pane
+                     graph.removeVertex(vertex); // remove the vertex from the graph and its edges
                   }
                });
             }
@@ -57,99 +59,55 @@ public class GraphView extends Pane {
    }
 
    public void eraseEdgesOfVertex(Vertex v) {
-      int index = graph.getIndex(v);
-      List<Integer> neighbors = graph.getNeighbors(index);
+      int vertex = graph.getIndex(v);
+      // get the neighbors of the vertex
+      List<Integer> neighbors = graph.getNeighbors(vertex);
       for (Integer neighbor: neighbors) {
-         eraseEdge(index, (int)neighbor);
+         // erase all edges between the vertex and its neighbors 
+         eraseEdge(vertex, neighbor);
       }
    }
 
-   public void drawEdge(int u, int v) {
+   public void eraseEdge(int u, int v) {
+      // create a key for the line map
+      String key = createKey(u, v);
+      
+      // if the key exists in the map, remove the line from the pane and the map
+      if (lineMap.containsKey(key)) {
+         this.getChildren().remove(lineMap.get(key));
+         lineMap.remove(key);
+      }
+   }
+
+   public boolean drawEdge(int u, int v) {
+      // create a key for the line map
+      String key = createKey(u, v);
+
+      // if the line already exists in the map, don't add the line again 
+      if (lineMap.containsKey(key)) return false;
+
+      // get the vertices between which the line is drawn
       Vertex U = graph.getVertex(u);
       Vertex V = graph.getVertex(v);
+      
+      // draw the line and add it to the pane
       Line line = new Line(U.getX(), U.getY(), V.getX(), V.getY());
       this.getChildren().add(line);
       line.toBack();
-      edgeLines.put(new String(u + " " + v), line);
-      // print the map
-      for (Map.Entry<String, Line> entry: edgeLines.entrySet()) {
-         System.out.println(entry.getKey() + " " + entry.getValue());
-      }
+      
+      // add the line to the map
+      lineMap.put(key, line);
+      return true; // return true if the line was added
    }
 
-
-
-
-
-
-
-
-   public void eraseEdge(int u, int v) {
-      String key1 = new String(u + " " + v);
-      String key2 = new String(v + " " + u);
-      //removing line with key
-      System.out.println("removing line with key: " + key1);
-      Line line = edgeLines.get(key1);
-      if (line != null) {
-         System.out.println("removing line");
-         this.getChildren().remove(line);
-         edgeLines.remove(key1);
-      }
-      else {
-         line = edgeLines.get(key2);
-         if (line != null) {
-            System.out.println("removing line");
-            this.getChildren().remove(line);
-            edgeLines.remove(key2);
-         }
-      }
+   // creates a key for the edge map that will be consistent regardless of the order of u and v
+   private String createKey(int u, int v) {
+      int smaller = Math.min(u, v);
+      int larger = Math.max(u, v);
+      return smaller + " " + larger;
    }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-   // public void drawEdge(int u, int v) {
-   //    Vertex U = graph.getVertex(u);
-   //    Vertex V = graph.getVertex(v);
-   //    Line line = new Line(U.getX(), U.getY(), V.getX(), V.getY());
-   //    this.getChildren().add(line);
-   //    line.toBack();
-   // }
-   
-   
-   // // removes the edge between vertice index u and v
-   // public void eraseEdge(int u, int v) {
-   //    double uX = graph.getVertices().get(u).getX();
-   //    double uY = graph.getVertices().get(u).getY();
-   //    double vX = graph.getVertices().get(v).getX();
-   //    double vY = graph.getVertices().get(v).getY();
-   
-   //    List<Node> toRemove = new ArrayList<>();
-   //    for (Node line: this.getChildren()) {
-   //       if (line instanceof Line) {
-   //          Line l = (Line)line;
-   //          if (l.getStartX() == uX && l.getStartY() == uY && l.getEndX() == vX && l.getEndY() == vY ||
-   //             l.getStartX() == vX && l.getStartY() == vY && l.getEndX() == uX && l.getEndY() == uY ) {
-   //             toRemove.add(line);
-   //             break;
-   //          }
-   //       }
-   //    }
-   //    this.getChildren().removeAll(toRemove);
-   // }
-
-   // removes all edges and redraws them
+   // removes all edges and redraws them (not used keep for reference)
    private void redrawEdges() {
       List<Node> toRemove = new ArrayList<>();
       for (Node line: this.getChildren()) {

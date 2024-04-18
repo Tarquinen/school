@@ -1,9 +1,9 @@
 import java.util.*;
 
 public class Graph {
-   protected List<Vertex> vertices = new ArrayList<>();
-   protected List<List<Edge>> neighbors = new ArrayList<>();
-   protected List<String> names = new ArrayList<>();
+   protected List<Vertex> vertices;
+   protected List<List<Edge>> neighbors;
+   protected List<String> names;
 
    class Edge {
       public int u;
@@ -26,6 +26,9 @@ public class Graph {
    }
 
    public Graph() {
+      this.vertices = new ArrayList<>();
+      this.neighbors = new ArrayList<>();
+      this.names = new ArrayList<>();
    }
 
    public Graph(Vertex[] vertices, int[][] edges) {

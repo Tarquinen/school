@@ -4,6 +4,7 @@ public class Graph {
    protected List<Vertex> vertices;
    protected List<List<Edge>> neighbors;
    protected List<String> names;
+   protected List<Integer> dfsList;
 
    class Edge {
       public int u;
@@ -29,6 +30,7 @@ public class Graph {
       this.vertices = new ArrayList<>();
       this.neighbors = new ArrayList<>();
       this.names = new ArrayList<>();
+      this.dfsList = new ArrayList<>();
    }
 
    public Graph(Vertex[] vertices, int[][] edges) {
@@ -113,9 +115,45 @@ public class Graph {
       return removed;
    }
 
+   public List<Integer> dfs(int v) {
+      boolean[] isVisited = new boolean[getSize()];
+      Arrays.fill(isVisited, false);
+      dfsList.clear();
+      dfs(v, isVisited);
+      return dfsList;
+   }
+
+   private void dfs(int v, boolean[] isVisited) {
+      dfsList.add(v);
+      isVisited[v] = true;
+      for (int neighbor: getNeighbors(v)) {
+         if (!isVisited[neighbor]) {
+            dfs(neighbor, isVisited);
+         }
+      }
+   }
+
+   public String getDfsString() {
+      dfs(0);
+      String dfsString = "";
+      for (int i = 0; i < dfsList.size(); i++) {
+         if (i != dfsList.size() - 1)
+            dfsString += getVertex(dfsList.get(i)).getName() + ", ";
+            // dfsString += dfsList.get(i) + ", ";
+         else
+            dfsString += getVertex(dfsList.get(i)).getName();
+            // dfsString += dfsList.get(i);
+      }
+      return dfsString;
+   }
+
    private void createAdjacencyList(int[][] edges, int numberOfVertices) {
       for (int i = 0; i < edges.length; i++)
          addEdge(edges[i][0], edges[i][1]);
+   }
+
+   public boolean isConnected() {
+      return dfs(0).size() == getSize();
    }
 
    public int getSize() {

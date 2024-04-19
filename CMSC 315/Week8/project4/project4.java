@@ -16,9 +16,6 @@ public class project4 extends Application{
    private TextField tfVertex1 = new TextField(); 
    private Label lbVertex2 = new Label("Vertex 2");
    private TextField tfVertex2 = new TextField();
-   private Label lbLeftMouseAction = new Label("Left Mouse Click:");
-   private Button btNewVertex = new Button("New Vertex");
-   private Button btConnectVertices = new Button("Connect Vertices");
    private Button btIsConnected = new Button("Is Connected?");
    private Button btHasCycles = new Button("Has Cycles?");
    private Button btDepthFirstSearch = new Button("Depth First Search");
@@ -98,7 +95,18 @@ public class project4 extends Application{
          }
       });
 
+      btDepthFirstSearch.setOnAction(e -> {
+         tfResult.setText(graph.getDfsString());
+      });
 
+      btIsConnected.setOnAction(e -> {
+         if (graph.isConnected()) {
+            tfResult.setText("Graph is connected");
+         }
+         else {
+            tfResult.setText("Graph is not connected");
+         }
+      });
 
 
 

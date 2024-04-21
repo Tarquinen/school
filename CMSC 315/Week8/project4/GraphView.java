@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.HashMap;
+import javafx.scene.paint.Color;
 
 public class GraphView extends Pane {
    private Graph graph;
@@ -28,6 +29,7 @@ public class GraphView extends Pane {
    }
 
    private void initializeMouseEventHandlers() {
+      // if the mouse is pressed, check if the click is on a vertex
       this.setOnMousePressed(e -> {
          vertex1 = getVertexIndex(new Point2D(e.getX(), e.getY())); // returns an index if clicking a vertex, -1 otherwise
          if (vertex1 != -1 && e.getButton() == MouseButton.PRIMARY) {
@@ -39,6 +41,7 @@ public class GraphView extends Pane {
          }
       });
 
+      // if the mouse is released, check if the click starts and ends on a vertex
       this.setOnMouseReleased(e -> {
          vertex2 = getVertexIndex(new Point2D(e.getX(), e.getY())); // reprents the vertex where the mouse is released, -1 if not on a vertex
          // if the click starts and ends on a vertex, add an edge between the two vertices
@@ -46,6 +49,7 @@ public class GraphView extends Pane {
             graph.addEdge(vertex1, vertex2);
             drawEdge(vertex1, vertex2);
             this.getChildren().remove(draggingLine);
+            eraseDirectionalLines();
          }
          // if the click doesn't start on a vertex and doesn't end on a vertex, add a new vertex
          else if (vertex1 == -1 && vertex2 == -1 && e.getButton() == MouseButton.PRIMARY) {
@@ -58,6 +62,7 @@ public class GraphView extends Pane {
          }
       });
 
+      // if the mouse is dragged from a vertex, update the end of the dragging line
       this.setOnMouseDragged(e -> {
          if (vertex1 != -1 && e.getButton() == MouseButton.PRIMARY) {
             draggingLine.setEndX(e.getX());
@@ -71,10 +76,12 @@ public class GraphView extends Pane {
       Vertex vertex = new Vertex(x, y);
       graph.addVertex(vertex);
       Circle circle = new Circle(x, y, 5);
-      Text text = new Text(x - 5, y - 10, vertex.getName());
       this.getChildren().add(circle);
+
+      Text text = new Text(x - 5, y - 10, vertex.getName());
       this.getChildren().add(text);
       text.toBack(); 
+
       circle.setOnMouseClicked(f -> {
          // if the right mouse button is clicked on a vertex, remove the vertex and its edges
          if (f.getButton() == MouseButton.SECONDARY) {
@@ -82,6 +89,7 @@ public class GraphView extends Pane {
             this.getChildren().remove(text);
             eraseEdgesOfVertex(vertex); // erase all edges of the vertex from the pane
             graph.removeVertex(vertex); // remove the vertex from the graph and its edges
+            eraseDirectionalLines();
          }
       });
    }
@@ -123,6 +131,7 @@ public class GraphView extends Pane {
       
       // draw the line and add it to the pane
       Line line = new Line(U.getX(), U.getY(), V.getX(), V.getY());
+      // DirectionalLine line = new DirectionalLine(U.getX(), U.getY(), V.getX(), V.getY());
       line.setStrokeWidth(3);
       this.getChildren().add(line);
       line.toBack();
@@ -148,15 +157,45 @@ public class GraphView extends Pane {
       return smaller + " " + larger;
    }   
 
-   // removes all edges and redraws them (not used keep for reference)
-   private void redrawEdges() {
+   // draws a directional line from vertex index u to vertex index v
+   public void drawDirectionalLine(int u, int v) {
+      Vertex U = graph.getVertex(u);
+      Vertex V = graph.getVertex(v);
+
+      DirectionalLine line = new DirectionalLine(U.getX(), U.getY(), V.getX(), V.getY());
+      this.getChildren().add(line);
+      line.toBack();
+      eraseEdge(u, v);
+   } 
+
+   public void drawDirectionalLine(int u, int v, Color color) {
+      Vertex U = graph.getVertex(u);
+      Vertex V = graph.getVertex(v);
+
+      DirectionalLine line = new DirectionalLine(U.getX(), U.getY(), V.getX(), V.getY(), color);
+      this.getChildren().add(line);
+      line.toBack();
+      eraseEdge(u, v);
+   } 
+
+   // erases all directional lines from the pane
+   public void eraseDirectionalLines() {
       List<Node> toRemove = new ArrayList<>();
       for (Node line: this.getChildren()) {
-         if (line instanceof Line) {
+         if (line instanceof DirectionalLine) {
             toRemove.add(line);
          }
       }
       this.getChildren().removeAll(toRemove);
+      redrawEdges();
+   }
+   
+   // removes all edges and redraws them
+   public void redrawEdges() {
+      for (Vertex v: graph.getVertices()) {
+         if (v == null) continue;
+         eraseEdgesOfVertex(v);
+      }
       for (int i = 0; i < graph.getVertices().size(); i++) {
          for (Integer neighbor: graph.getNeighbors(i)) {
             drawEdge(i, neighbor);
@@ -164,6 +203,7 @@ public class GraphView extends Pane {
       }
    }
 
+   // returns the index of the vertex at the specified point p
    private int getVertexIndex(Point2D p) {
       for (Node circle: this.getChildren()) {
          if (circle instanceof Circle && circle.contains(p)) {

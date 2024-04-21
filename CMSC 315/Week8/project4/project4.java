@@ -1,7 +1,7 @@
+import java.util.List;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
-import javafx.scene.layout.Pane;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -9,8 +9,11 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.geometry.Pos;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import java.util.Random;
+import javafx.geometry.Insets;
 
-public class project4 extends Application{
+public class project4 extends Application {
    private Button btAddEdge = new Button("Add Edge");
    private Label lbVertex1 = new Label("Vertex 1");
    private TextField tfVertex1 = new TextField(); 
@@ -18,6 +21,8 @@ public class project4 extends Application{
    private TextField tfVertex2 = new TextField();
    private Button btIsConnected = new Button("Is Connected?");
    private Button btHasCycles = new Button("Has Cycles?");
+   private Button btPreviousCycle = new Button("<");
+   private Button btNextCycle = new Button(">");
    private Button btDepthFirstSearch = new Button("Depth First Search");
    private Button btBreadthFirstSearch = new Button("Breadth First Search");
    private TextField tfResult = new TextField();
@@ -45,29 +50,36 @@ public class project4 extends Application{
       tfResult.setAlignment(Pos.CENTER);
       tfResult.setMaxWidth(435);
       tfResult.setAlignment(Pos.CENTER_LEFT);
+      HBox cycleBox = new HBox(btPreviousCycle, btNextCycle);
+      cycleBox.setAlignment(Pos.CENTER);
+      cycleBox.setSpacing(10);
 
-      VBox footer = new VBox(buttonBox, tfResult);
+      VBox footer = new VBox(cycleBox, buttonBox, tfResult);
+      VBox.setMargin(cycleBox, new Insets(0, 0, 0, -155));
       footer.setAlignment(Pos.CENTER);
       footer.setSpacing(10);
-      footer.setPrefHeight(100);
+      footer.setPrefHeight(120);
 
       pane.setTop(header);
       pane.setCenter(graphPane);
       pane.setBottom(footer);
 
       btAddEdge.setOnAction(e -> {
+         // convert vertex names to integers (A=0, B=1, ..., Z=25, AA=26, AB=27, ...)
          String tfU = tfVertex1.getText().toUpperCase();
          String tfV = tfVertex2.getText().toUpperCase();
          int u = stringValue(tfU);
          int v = stringValue(tfV);
+
          if (u == v) {
             tfResult.setText("Cannot add an edge to itself");
             return;
          }
 
+         // check if the vertices exist in the graph
          boolean foundVertex1 = false;
          boolean foundVertex2 = false;
-         for (String name : graph.getNames()) {
+         for (String name : graph.getVertexNames()) {
             if (tfU.equals(name)) foundVertex1 = true;
             if (tfV.equals(name)) foundVertex2 = true;
             if (foundVertex1 && foundVertex2) break;
@@ -86,7 +98,9 @@ public class project4 extends Application{
             return;
          }
 
+         // add the edge to the graph and draw it on the pane
          if (graph.addEdge(u, v)) {
+            graphPane.eraseDirectionalLines();
             tfResult.clear();
             graphPane.drawEdge(u, v);
          }
@@ -94,12 +108,13 @@ public class project4 extends Application{
             tfResult.setText("Edge already exists");
          }
       });
-
-      btDepthFirstSearch.setOnAction(e -> {
-         tfResult.setText(graph.getDfsString());
-      });
-
+      
       btIsConnected.setOnAction(e -> {
+         if (graph.getCurrentSize() < 2) {
+            tfResult.setText("Graph must have at least 2 vertices");
+            return;
+         }
+         graphPane.eraseDirectionalLines();
          if (graph.isConnected()) {
             tfResult.setText("Graph is connected");
          }
@@ -107,14 +122,80 @@ public class project4 extends Application{
             tfResult.setText("Graph is not connected");
          }
       });
-
-
-
-
-
-
-
-
+      
+      btHasCycles.setOnAction(e -> {
+         if (graph.getCurrentSize() < 3) {
+            tfResult.setText("Graph must have at least 3 vertices");
+            return;
+         }
+         graphPane.eraseDirectionalLines();
+         List<List<Integer>> allCycles = graph.findAllCycles();
+         int cycleCount = allCycles.size();
+         final int[] currentCycle = {0}; // has to be a final array to be used in lambda and to be modifiable
+         tfResult.setText("Graph has " + cycleCount + " cycles");
+         if (graph.hasCycles()) {
+            tfResult.setText("Graph has " + cycleCount + " cycles");
+            for (int i = 0; i < allCycles.get(0).size() - 1; i++) {
+               graphPane.drawDirectionalLine(allCycles.get(0).get(i), allCycles.get(0).get(i + 1));
+            }
+            graphPane.drawDirectionalLine(allCycles.get(0).get(allCycles.get(0).size() - 1), allCycles.get(0).get(0));            
+            btPreviousCycle.setOnAction(f -> {
+               if (currentCycle[0] > 0) {
+                  graphPane.eraseDirectionalLines();
+                  currentCycle[0]--;
+                  tfResult.setText("Cycle " + (currentCycle[0] + 1) + " of " + cycleCount);
+                  for (int i = 0; i < allCycles.get(currentCycle[0]).size() - 1; i++) {
+                     graphPane.drawDirectionalLine(allCycles.get(currentCycle[0]).get(i), allCycles.get(currentCycle[0]).get(i + 1));
+                  }
+                  graphPane.drawDirectionalLine(allCycles.get(currentCycle[0]).get(allCycles.get(currentCycle[0]).size() - 1), allCycles.get(currentCycle[0]).get(0));
+               }
+            });
+            btNextCycle.setOnAction(f -> {
+               if (currentCycle[0] < cycleCount - 1) {
+                  graphPane.eraseDirectionalLines();
+                  currentCycle[0]++;
+                  tfResult.setText("Cycle " + (currentCycle[0] + 1) + " of " + cycleCount);
+                  for (int i = 0; i < allCycles.get(currentCycle[0]).size() - 1; i++) {
+                     graphPane.drawDirectionalLine(allCycles.get(currentCycle[0]).get(i), allCycles.get(currentCycle[0]).get(i + 1));
+                  }
+                  graphPane.drawDirectionalLine(allCycles.get(currentCycle[0]).get(allCycles.get(currentCycle[0]).size() - 1), allCycles.get(currentCycle[0]).get(0));
+               }
+            });
+         }
+         else {
+            tfResult.setText("Graph does not have cycles");
+         }
+      });
+      
+      btDepthFirstSearch.setOnAction(e -> {
+         if (graph.getCurrentSize() < 2) {
+            tfResult.setText("Graph must have at least 2 vertices");
+            return;
+         }
+         tfResult.setText(graph.getDfsString());
+         graphPane.eraseDirectionalLines();
+         int[] dfsParents = graph.dfs();
+         for (int i = 0; i < dfsParents.length; i++) {
+            if (dfsParents[i] != -1) {
+               graphPane.drawDirectionalLine(dfsParents[i], i);
+            }
+         }
+      });
+      
+      btBreadthFirstSearch.setOnAction(e -> {
+         if (graph.getCurrentSize() < 2) {
+            tfResult.setText("Graph must have at least 2 vertices");
+            return;
+         }
+         graphPane.eraseDirectionalLines();
+         tfResult.setText(graph.getBfsString());
+         int[] bfsParents = graph.bfs();
+         for (int i = 0; i < bfsParents.length; i++) {
+            if (bfsParents[i] != -1) {
+               graphPane.drawDirectionalLine(bfsParents[i], i);
+            }
+         }
+      });
 
       Scene scene = new Scene(pane, 600, 500);
       primaryStage.setTitle("Project 4");

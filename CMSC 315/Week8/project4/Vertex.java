@@ -1,3 +1,12 @@
+/**
+ * Daniel Smolsky
+ * Programming Project 4 - Graphs
+ * April 21, 2024
+ * The Vertex class represents a vertex in a graph, with an (x,y) coordinate and a unique name.
+ * Each vertex has a static count that is incremented with each new vertex creation.
+ * The class provides methods to access the vertex's coordinates and name, as well as a toString() method for easy printing.
+ */
+
 public class Vertex {
    private double x, y;
    private String name;

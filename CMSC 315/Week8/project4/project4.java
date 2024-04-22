@@ -1,3 +1,13 @@
+/**
+ * Daniel Smolsky
+ * Programming Project 4 - Graphs
+ * April 21, 2024
+ * The project4 class is the main entry point for the Graph Visualization application.
+ * It sets up the JavaFX user interface, including the header with controls for adding edges,
+ * checking connectivity and cycles, and performing depth-first and breadth-first searches.
+ * The main graph visualization pane is also created and added to the BorderPane layout.
+ */
+
 import java.util.List;
 import javafx.application.Application;
 import javafx.stage.Stage;
@@ -9,8 +19,6 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.geometry.Pos;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
-import java.util.Random;
 import javafx.geometry.Insets;
 
 public class project4 extends Application {
@@ -38,7 +46,6 @@ public class project4 extends Application {
       header.setPrefHeight(50);
       tfVertex1.setPrefWidth(30);
       tfVertex2.setPrefWidth(30);
-
 
       GraphView graphPane = new GraphView(graph);
 
@@ -128,58 +135,61 @@ public class project4 extends Application {
             tfResult.setText("Graph must have at least 3 vertices");
             return;
          }
-         graphPane.eraseDirectionalLines();
-         List<List<Integer>> allCycles = graph.findAllCycles();
-         int cycleCount = allCycles.size();
-         final int[] currentCycle = {0}; // has to be a final array to be used in lambda and to be modifiable
-         tfResult.setText("Graph has " + cycleCount + " cycles");
-         if (graph.hasCycles()) {
-            tfResult.setText("Graph has " + cycleCount + " cycles");
-            for (int i = 0; i < allCycles.get(0).size() - 1; i++) {
-               graphPane.drawDirectionalLine(allCycles.get(0).get(i), allCycles.get(0).get(i + 1));
-            }
-            graphPane.drawDirectionalLine(allCycles.get(0).get(allCycles.get(0).size() - 1), allCycles.get(0).get(0));            
-            btPreviousCycle.setOnAction(f -> {
-               if (currentCycle[0] > 0) {
-                  graphPane.eraseDirectionalLines();
-                  currentCycle[0]--;
-                  tfResult.setText("Cycle " + (currentCycle[0] + 1) + " of " + cycleCount);
-                  for (int i = 0; i < allCycles.get(currentCycle[0]).size() - 1; i++) {
-                     graphPane.drawDirectionalLine(allCycles.get(currentCycle[0]).get(i), allCycles.get(currentCycle[0]).get(i + 1));
-                  }
-                  graphPane.drawDirectionalLine(allCycles.get(currentCycle[0]).get(allCycles.get(currentCycle[0]).size() - 1), allCycles.get(currentCycle[0]).get(0));
-               }
-            });
-            btNextCycle.setOnAction(f -> {
-               if (currentCycle[0] < cycleCount - 1) {
-                  graphPane.eraseDirectionalLines();
-                  currentCycle[0]++;
-                  tfResult.setText("Cycle " + (currentCycle[0] + 1) + " of " + cycleCount);
-                  for (int i = 0; i < allCycles.get(currentCycle[0]).size() - 1; i++) {
-                     graphPane.drawDirectionalLine(allCycles.get(currentCycle[0]).get(i), allCycles.get(currentCycle[0]).get(i + 1));
-                  }
-                  graphPane.drawDirectionalLine(allCycles.get(currentCycle[0]).get(allCycles.get(currentCycle[0]).size() - 1), allCycles.get(currentCycle[0]).get(0));
-               }
-            });
+
+         if (!graph.hasCycles()) {
+            tfResult.setText("Graph does not have cycles");
+            return;
          }
          else {
-            tfResult.setText("Graph does not have cycles");
+            // calculate the cycle count and create the list of cycles
+            graph.findCyclesDFS();
+
+            // index of the current cycle being displayed, has to be final to be used in lambda and array to be modifiable
+            final int[] currentCycleIndex = {0};
+
+            // get the number of cycles in the graph
+            int cycleCount = graph.getCycleCount();
+
+            // display the cycle count
+            if (cycleCount == 1)
+               tfResult.setText("Graph has 1 cycle");
+            else if (cycleCount > 1)
+               tfResult.setText("Graph has " + cycleCount + " cycles");
+
+            // display the first cycle
+            graphPane.displayCycle();
+
+            // cycle navigation buttons NOTE: these buttons will not recalculate the cycles, only display 
+            // the next or previous cycle in the list of cycles. To recalculate the cycles, the user must 
+            // click the "Has Cycles?" button. This is because recalculating the cycles is an expensive operation.
+            btNextCycle.setOnAction(f -> {
+               if (graphPane.displayCycle(++currentCycleIndex[0])) { // returns true if next cycle exists
+                  tfResult.setText("Cycle " + (currentCycleIndex[0] + 1) + " of " + cycleCount);
+               }
+               else {
+                  currentCycleIndex[0]--;
+               }
+            });
+
+            btPreviousCycle.setOnAction(f -> {
+               if (graphPane.displayCycle(--currentCycleIndex[0])) { // returns true if previous cycle exists
+                  tfResult.setText("Cycle " + (currentCycleIndex[0] + 1) + " of " + cycleCount);
+               }
+               else {
+                  currentCycleIndex[0]++;
+               }
+            });
          }
       });
       
+      // depth-first search
       btDepthFirstSearch.setOnAction(e -> {
          if (graph.getCurrentSize() < 2) {
             tfResult.setText("Graph must have at least 2 vertices");
             return;
          }
+         graphPane.displayDfs();
          tfResult.setText(graph.getDfsString());
-         graphPane.eraseDirectionalLines();
-         int[] dfsParents = graph.dfs();
-         for (int i = 0; i < dfsParents.length; i++) {
-            if (dfsParents[i] != -1) {
-               graphPane.drawDirectionalLine(dfsParents[i], i);
-            }
-         }
       });
       
       btBreadthFirstSearch.setOnAction(e -> {
@@ -187,14 +197,8 @@ public class project4 extends Application {
             tfResult.setText("Graph must have at least 2 vertices");
             return;
          }
-         graphPane.eraseDirectionalLines();
+         graphPane.displayBfs();
          tfResult.setText(graph.getBfsString());
-         int[] bfsParents = graph.bfs();
-         for (int i = 0; i < bfsParents.length; i++) {
-            if (bfsParents[i] != -1) {
-               graphPane.drawDirectionalLine(bfsParents[i], i);
-            }
-         }
       });
 
       Scene scene = new Scene(pane, 600, 500);
@@ -203,6 +207,7 @@ public class project4 extends Application {
       primaryStage.show();
    }
 
+   // convert vertex names to integers (A=0, B=1, ..., Z=25, AA=26, AB=27, ...)
    public static int stringValue(String s) {
       if (s.length() == 1) {
          return s.charAt(0) - 'A';

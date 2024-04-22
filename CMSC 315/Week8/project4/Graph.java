@@ -1,17 +1,25 @@
+/**
+ * Daniel Smolsky
+ * Programming Project 4 - Graphs
+ * April 21, 2024
+ * The Graph class represents a graph data structure, consisting of vertices and edges.
+ * It provides methods to add vertices, add edges, perform depth-first search (DFS) and
+ * breadth-first search (BFS), and detect cycles in the graph.
+ */
+
 import java.util.*;
 
 public class Graph {
    protected List<Vertex> vertices;
    protected List<List<Edge>> neighbors;
-   protected List<String> vertexNames;
    protected List<Integer> dfsSearchOrder;
    protected List<Integer> bfsSearchOrder;
-   protected List<List<Integer>> cycles;
    protected boolean hasCycles;
+   protected List<List<Integer>> allCycles;
 
    class Edge {
-      public int u;
-      int v;
+      protected int u;
+      protected int v;
 
       public Edge(int u, int v) {
          this.u = u;
@@ -33,7 +41,6 @@ public class Graph {
    public Graph() {
       this.vertices = new ArrayList<>();
       this.neighbors = new ArrayList<>();
-      this.vertexNames = new ArrayList<>();
       this.dfsSearchOrder = new ArrayList<>();
       this.bfsSearchOrder = new ArrayList<>();
    }
@@ -42,7 +49,6 @@ public class Graph {
    public boolean addVertex(Vertex v) {
       if (!vertices.contains(v)) {
          vertices.add(v);
-         vertexNames.add(v.getName());
          neighbors.add(new ArrayList<Edge>());
          return true;
       }
@@ -58,7 +64,6 @@ public class Graph {
                removeEdge(e);
             }
          vertices.set(index, null);
-         vertexNames.remove(v.getName());
          return true;
       }
       return false;
@@ -152,38 +157,43 @@ public class Graph {
          }
       }
    }
+   
+   // returns the depth-first search String
+   public String getDfsString() {
+      if (dfsSearchOrder.isEmpty()) dfs();
+      String dfsString = "";
+      for (int i = 0; i < dfsSearchOrder.size(); i++) {
+         if (i != dfsSearchOrder.size() - 1)
+            dfsString += getVertex(dfsSearchOrder.get(i)).getName() + ", ";
+         else
+            dfsString += getVertex(dfsSearchOrder.get(i)).getName();
+      }
+      return dfsString;
+   }
 
-   public List<List<Integer>> findAllCycles() {
+   // returns a list of all the cycles in the graph
+   public void findCyclesDFS() {
       List<List<Integer>> allCycles = new ArrayList<>();
       boolean[] isVisited = new boolean[getSize()];
       List<Integer> currentPath = new ArrayList<>();
 
       for (int i = 0; i < getSize(); i++) {
-         if (!isVisited[i] && vertices.get(i) != null) {
-               findCyclesDFS(i, i, isVisited, currentPath, allCycles);
+         if (vertices.get(i) != null) {
+            findCyclesDFS(i, i, isVisited, currentPath, allCycles);
          }
       }
       allCycles = removeDuplicateCycles(allCycles);
-      // // print all cycles
-      // for (List<Integer> cycle : allCycles) {
-      //    for (int i = 0; i < cycle.size(); i++) {
-      //       if (i != cycle.size() - 1)
-      //          System.out.print(getVertex(cycle.get(i)).getName() + " -> ");
-      //       else
-      //          System.out.print(getVertex(cycle.get(i)).getName() + " -> " + getVertex(cycle.get(0)).getName());
-      //    }
-      //    System.out.println();
-      // }
-      return allCycles;
+      this.allCycles = allCycles;
    }
 
+   // depth-first search helper method to find cycles
    private void findCyclesDFS(int start, int current, boolean[] isVisited, List<Integer> currentPath, List<List<Integer>> allCycles) {
       isVisited[current] = true;
       currentPath.add(current);
 
       for (int neighbor : getNeighbors(current)) {
          if (neighbor == start && currentPath.size() > 2) {
-               // Add the current path as a new cycle
+               // Add the current path to the list of cycles
                allCycles.add(new ArrayList<>(currentPath));
          } else if (!isVisited[neighbor]) {
                findCyclesDFS(start, neighbor, isVisited, currentPath, allCycles);
@@ -210,18 +220,31 @@ public class Graph {
       }
       return uniqueCycles;
    }
-
-   // returns the depth-first search String
-   public String getDfsString() {
+   
+   // returns true if the graph has cycles, this is more efficient than findCyclesDFS() which returns all cycles
+   public boolean hasCycles() {
       dfs();
-      String dfsString = "";
-      for (int i = 0; i < dfsSearchOrder.size(); i++) {
-         if (i != dfsSearchOrder.size() - 1)
-            dfsString += getVertex(dfsSearchOrder.get(i)).getName() + ", ";
-         else
-            dfsString += getVertex(dfsSearchOrder.get(i)).getName();
+      return hasCycles;
+   }
+
+   // returns the amount of cycles in the graph
+   public int getCycleCount() {
+      if (this.hasCycles()) {
+         if (allCycles == null) findCyclesDFS();
+         return allCycles.size();
       }
-      return dfsString;
+      else return 0;
+   }
+
+   // returns the cycle at the specified index
+   public List<Integer> getCycle(int index) {
+      if (this.hasCycles()) {
+         if (allCycles == null) findCyclesDFS();
+         if (index < allCycles.size() && index >= 0)
+            return allCycles.get(index);
+         else return null;
+      }
+      else return null;
    }
 
    // returns the breadth-first search list of vertices and their parents
@@ -265,7 +288,7 @@ public class Graph {
 
    // returns the breadth-first search String
    public String getBfsString() {
-      bfs();
+      if (bfsSearchOrder.isEmpty()) bfs();
       // print the bfs search order
       String bfsString = "";
       for (int i = 0; i < bfsSearchOrder.size(); i++) {
@@ -275,12 +298,6 @@ public class Graph {
             bfsString += getVertex(bfsSearchOrder.get(i)).getName();
       }
       return bfsString;
-   }
-
-   // returns true if the graph has cycles
-   public boolean hasCycles() {
-      dfs();
-      return hasCycles;
    }
 
    // returns true if the graph is connected
@@ -347,6 +364,10 @@ public class Graph {
 
    // returns a list of all the vertex names
    public List<String> getVertexNames() {
+      List<String> vertexNames = new ArrayList<>(); 
+      for (Vertex v: vertices) {
+         if (v != null) vertexNames.add(v.getName());
+      }
       return vertexNames;
    }
 }

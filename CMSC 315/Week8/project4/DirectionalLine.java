@@ -1,3 +1,13 @@
+/**
+ * Daniel Smolsky
+ * Programming Project 4 - Graphs
+ * April 21, 2024
+ * The DirectionalLine class extends the JavaFX Path class to create a directional line with optional arrow heads.
+ * The line is defined by its start and end coordinates, and can be customized with a specified arrow head size,
+ * stroke width, and color. The class automatically adds the appropriate number of arrow heads based on the length
+ * of the line.
+ */
+
 import javafx.scene.paint.Color;
 import javafx.scene.shape.LineTo;
 import javafx.scene.shape.MoveTo;
@@ -5,7 +15,7 @@ import javafx.scene.shape.Path;
 
 public class DirectionalLine extends Path {
    private static final double DEFAULT_SIZE = 8.0;
-   private static final int STROKE_WIDTH = 3;
+   private static final int DEFAULT_STROKE_WIDTH = 3;
    private static final Color DEFAULT_COLOR = Color.RED;
 
    public DirectionalLine(double startX, double startY, double endX, double endY,
@@ -29,7 +39,7 @@ public class DirectionalLine extends Path {
          double x = startX + (endX - startX) * ratio;
          double y = startY + (endY - startY) * ratio;
 
-         // ArrowHead
+         // arrow head angles
          double angle = Math.atan2((endY - startY), (endX - startX)) - Math.PI / 2.0;
          double sin = Math.sin(angle);
          double cos = Math.cos(angle);
@@ -48,12 +58,7 @@ public class DirectionalLine extends Path {
       }
    }
 
-   public DirectionalLine(double startX, double startY, double endX, double endY, Color color) {
-      this(startX, startY, endX, endY, DEFAULT_SIZE, STROKE_WIDTH, color);
-   }
-
    public DirectionalLine(double startX, double startY, double endX, double endY) {
-      this(startX, startY, endX, endY, DEFAULT_SIZE, STROKE_WIDTH, DEFAULT_COLOR);
+      this(startX, startY, endX, endY, DEFAULT_SIZE, DEFAULT_STROKE_WIDTH, DEFAULT_COLOR);
    }
-
 }

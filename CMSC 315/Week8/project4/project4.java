@@ -144,17 +144,15 @@ public class project4 extends Application {
             // calculate the cycle count and create the list of cycles
             graph.findCyclesDFS();
 
+            // get the number of cycles in the graph
+            final int cycleCount = graph.getCycleCount();
+
             // index of the current cycle being displayed, has to be final to be used in lambda and array to be modifiable
             final int[] currentCycleIndex = {0};
 
-            // get the number of cycles in the graph
-            int cycleCount = graph.getCycleCount();
-
             // display the cycle count
-            if (cycleCount == 1)
-               tfResult.setText("Graph has 1 cycle");
-            else if (cycleCount > 1)
-               tfResult.setText("Graph has " + cycleCount + " cycles");
+            if (cycleCount == 1) tfResult.setText("Graph has 1 cycle");
+            else tfResult.setText("Graph has " + cycleCount + " cycles");
 
             // display the first cycle
             graphPane.displayCycle();
@@ -162,22 +160,19 @@ public class project4 extends Application {
             // cycle navigation buttons NOTE: these buttons will not recalculate the cycles, only display 
             // the next or previous cycle in the list of cycles. To recalculate the cycles, the user must 
             // click the "Has Cycles?" button. This is because recalculating the cycles is an expensive operation.
+            // this is easily changed by calling graph.findCyclesDFS() in the lambda functions below and updating the cycleCount
             btNextCycle.setOnAction(f -> {
-               if (graphPane.displayCycle(++currentCycleIndex[0])) { // returns true if next cycle exists
+               if (graphPane.displayCycle(++currentCycleIndex[0])) // returns true and displays cycle if next cycle exists
                   tfResult.setText("Cycle " + (currentCycleIndex[0] + 1) + " of " + cycleCount);
-               }
-               else {
+               else
                   currentCycleIndex[0]--;
-               }
             });
 
             btPreviousCycle.setOnAction(f -> {
-               if (graphPane.displayCycle(--currentCycleIndex[0])) { // returns true if previous cycle exists
+               if (graphPane.displayCycle(--currentCycleIndex[0])) // returns true and displays cycle if previous cycle exists
                   tfResult.setText("Cycle " + (currentCycleIndex[0] + 1) + " of " + cycleCount);
-               }
-               else {
+               else 
                   currentCycleIndex[0]++;
-               }
             });
          }
       });

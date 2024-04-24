@@ -8,7 +8,6 @@
  * The main graph visualization pane is also created and added to the BorderPane layout.
  */
 
-import java.util.List;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
@@ -72,17 +71,15 @@ public class project4 extends Application {
       pane.setBottom(footer);
 
       btAddEdge.setOnAction(e -> {
-         // convert vertex names to integers (A=0, B=1, ..., Z=25, AA=26, AB=27, ...)
+         // get the vertex names from the text fields
          String tfU = tfVertex1.getText().toUpperCase();
          String tfV = tfVertex2.getText().toUpperCase();
-         int u = stringValue(tfU);
-         int v = stringValue(tfV);
-
-         if (u == v) {
+         
+         if (tfU.equals(tfV)) {
             tfResult.setText("Cannot add an edge to itself");
             return;
          }
-
+         
          // check if the vertices exist in the graph
          boolean foundVertex1 = false;
          boolean foundVertex2 = false;
@@ -91,7 +88,7 @@ public class project4 extends Application {
             if (tfV.equals(name)) foundVertex2 = true;
             if (foundVertex1 && foundVertex2) break;
          }
-
+         
          if (!foundVertex1 && !foundVertex2) {
             tfResult.setText("Neither vertex found in the graph");
             return;
@@ -105,6 +102,10 @@ public class project4 extends Application {
             return;
          }
 
+         // convert vertex names to integers (A=0, B=1, ..., Z=25, AA=26, AB=27, ...)
+         int u = stringValue(tfU);
+         int v = stringValue(tfV);
+         
          // add the edge to the graph and draw it on the pane
          if (graph.addEdge(u, v)) {
             graphPane.eraseDirectionalLines();
@@ -116,12 +117,14 @@ public class project4 extends Application {
          }
       });
       
+      // check if the graph is connected
       btIsConnected.setOnAction(e -> {
          if (graph.getCurrentSize() < 2) {
             tfResult.setText("Graph must have at least 2 vertices");
             return;
          }
          graphPane.eraseDirectionalLines();
+
          if (graph.isConnected()) {
             tfResult.setText("Graph is connected");
          }
@@ -130,6 +133,7 @@ public class project4 extends Application {
          }
       });
       
+      // check if the graph has cycles
       btHasCycles.setOnAction(e -> {
          if (graph.getCurrentSize() < 3) {
             tfResult.setText("Graph must have at least 3 vertices");
@@ -141,7 +145,7 @@ public class project4 extends Application {
             return;
          }
          else {
-            // calculate the cycle count and create the list of cycles
+            // create the list of cycles in the graph
             graph.findCyclesDFS();
 
             // get the number of cycles in the graph
@@ -157,10 +161,13 @@ public class project4 extends Application {
             // display the first cycle
             graphPane.displayCycle();
 
-            // cycle navigation buttons NOTE: these buttons will not recalculate the cycles, only display 
-            // the next or previous cycle in the list of cycles. To recalculate the cycles, the user must 
-            // click the "Has Cycles?" button. This is because recalculating the cycles is an expensive operation.
-            // this is easily changed by calling graph.findCyclesDFS() in the lambda functions below and updating the cycleCount
+            /**
+             * cycle navigation buttons 
+             * NOTE: these buttons will not recalculate the cycles, only display the next or previous cycle
+             * in the list of cycles. To recalculate the cycles, the user must click the "Has Cycles?" button.
+             * This is because recalculating the cycles is an expensive operation. This is easily changed by 
+             * calling graph.findCyclesDFS() in the lambda functions below and updating the cycleCount.
+            */
             btNextCycle.setOnAction(f -> {
                if (graphPane.displayCycle(++currentCycleIndex[0])) // returns true and displays cycle if next cycle exists
                   tfResult.setText("Cycle " + (currentCycleIndex[0] + 1) + " of " + cycleCount);
@@ -187,6 +194,7 @@ public class project4 extends Application {
          tfResult.setText(graph.getDfsString());
       });
       
+      // breadth-first search
       btBreadthFirstSearch.setOnAction(e -> {
          if (graph.getCurrentSize() < 2) {
             tfResult.setText("Graph must have at least 2 vertices");

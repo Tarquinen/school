@@ -19,13 +19,6 @@ public class Vertex {
       count++;
    }
 
-   // temp vertex for comparison, does not increment count
-   public Vertex(double x, double y, String name) {
-      this.x = x;
-      this.y = y;
-      this.name = name;
-   }
-
    public double getX() {
       return x;
    }
@@ -37,6 +30,14 @@ public class Vertex {
    public String getName() {
       return name;
    }
+
+   @Override
+   public boolean equals(Object o) {
+      if (o == this) return true;
+      if (!(o instanceof Vertex)) return false;
+      Vertex v = (Vertex) o;
+      return v.x == x && v.y == y;
+   }   
 
    @Override
    public String toString() {

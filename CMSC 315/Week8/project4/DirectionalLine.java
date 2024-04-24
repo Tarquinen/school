@@ -16,7 +16,7 @@ import javafx.scene.shape.Path;
 public class DirectionalLine extends Path {
    private static final double DEFAULT_SIZE = 8.0;
    private static final int DEFAULT_STROKE_WIDTH = 3;
-   private static final Color DEFAULT_COLOR = Color.RED;
+   private static final Color DEFAULT_COLOR = Color.GREEN;
 
    public DirectionalLine(double startX, double startY, double endX, double endY,
                         double arrowHeadSize, double strokeWidth, Color color) {

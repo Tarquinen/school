@@ -9,6 +9,9 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.HashMap;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 
 public class GraphView extends Pane {
    private Graph graph;
@@ -76,14 +79,18 @@ public class GraphView extends Pane {
       // create a new vertex and add it to the graph
       Vertex vertex = new Vertex(x, y);
       graph.addVertex(vertex);
+
       // draw the vertex on the pane
-      Circle circle = new Circle(x, y, 5);
+      Circle circle = new Circle(x, y, 6);
       this.getChildren().add(circle);
 
       // add the vertex name to the pane above the vertex
-      Text text = new Text(x - 5, y - 10, vertex.getName());
+      Text text = new Text(x - 5, y - 14, vertex.getName());
       this.getChildren().add(text);
-      text.toBack(); 
+      
+      // make the text visible when it overlaps with lines
+      text.setFill(Color.RED);
+      text.setFont(Font.font("System", FontWeight.BOLD, 14));
 
       // if the right mouse button is clicked on a vertex, remove the vertex and its edges
       circle.setOnMouseClicked(f -> {
@@ -108,7 +115,7 @@ public class GraphView extends Pane {
          eraseEdge(vertex, neighbor);
    }
 
-   // erases an edge from the pane
+   // erases an edge from the pane NOTE: this does not remove the edge from the graph
    private void eraseEdge(int u, int v) {
       // create a key for the line map
       String key = createKey(u, v);
@@ -134,7 +141,7 @@ public class GraphView extends Pane {
       
       // draw the line and add it to the pane
       Line line = new Line(U.getX(), U.getY(), V.getX(), V.getY());
-      line.setStrokeWidth(3);
+      line.setStrokeWidth(4);
       this.getChildren().add(line);
       line.toBack();
 
@@ -144,9 +151,8 @@ public class GraphView extends Pane {
       // if the right mouse button is clicked on a line, remove the line
       line.setOnMouseClicked(e -> {
          if (e.getButton() == MouseButton.SECONDARY) {
-            this.getChildren().remove(line);
-            lineMap.remove(key);
             graph.removeEdge(u, v);
+            eraseEdge(u, v);
          }
       });
       

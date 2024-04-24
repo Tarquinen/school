@@ -58,12 +58,8 @@ public class Graph {
    // removes a vertex from the graph
    public boolean removeVertex(Vertex v) {
       if (vertices.contains(v)) {
-         int index = getIndex(v);
-         List<Edge> edges = new ArrayList<>(neighbors.get(index)); // Copy to avoid ConcurrentModificationException
-            for (Edge e : edges) {
-               removeEdge(e);
-            }
-         vertices.set(index, null);
+         removeEdgesOfVertex(v);
+         vertices.set(getIndex(v), null);
          return true;
       }
       return false;
@@ -76,11 +72,6 @@ public class Graph {
 
    // adds an edge to the graph
    public boolean addEdge(Edge e) {
-      if (e.u < 0 || e.u > getSize() - 1)
-         throw new IllegalArgumentException("No such index: " + e.u);
-      if (e.v < 0 || e.v > getSize() - 1)
-         throw new IllegalArgumentException("No such index: " + e.u);
-
       if (!neighbors.get(e.u).contains(e)) {
          neighbors.get(e.u).add(e);
          neighbors.get(e.v).add(new Edge(e.v, e.u));
@@ -96,37 +87,30 @@ public class Graph {
 
    // removes an edge from the graph
    public boolean removeEdge(Edge e) {
-      if (e.u < 0 || e.u > getSize() - 1)
-         throw new IllegalArgumentException("No such index: " + e.u);
-      if (e.v < 0 || e.v > getSize() - 1)
-         throw new IllegalArgumentException("No such index: " + e.u);
-
-      boolean removed = false;
-      Iterator<Edge> it = neighbors.get(e.u).iterator();
-      while (it.hasNext()) {
-         Edge current = it.next();
-         if (current.equals(e)) {
-            it.remove();
-            removed = true;
-            break;
-         }
-      }
+      boolean removed = neighbors.get(e.u).remove(e);
       if (removed) {
-         Iterator<Edge> reverseIt = neighbors.get(e.v).iterator();
-         while (reverseIt.hasNext()) {
-            Edge reverseEdge = reverseIt.next();
-            if (reverseEdge.u == e.v && reverseEdge.v == e.u) {
-               reverseIt.remove();
-               break;
-            }
-         }
+         neighbors.get(e.v).remove(new Edge(e.v, e.u));
       }
-
       return removed;
+   }
+
+   // more efficient method to remove all edges of a vertex than calling removeEdge() for each edge
+   public void removeEdgesOfVertex(Vertex v) {
+      int vIndex = getIndex(v);
+      List<Integer> neighborsOfVertex = getNeighbors(vIndex);
+      
+      // clears all edges OF the vertex
+      neighbors.get(vIndex).clear();
+
+      // clears all edges TO the vertex
+      for (int neighbor : neighborsOfVertex) {
+         neighbors.get(neighbor).remove(new Edge(neighbor, vIndex));
+      }
    }
 
    // returns the depth-first search list of vertices and their parents
    public int[] dfs() {
+      // find the first vertex in the graph
       int startVertex = 0;
       for (int i = 0; i < getSize(); i++) {
          if (vertices.get(i) != null) {
@@ -134,11 +118,16 @@ public class Graph {
             break;
          }
       }
+
+      // clear previous dfs search order and cycles
       dfsSearchOrder.clear();
       hasCycles = false;
+
+      // initialize parent array and isVisited array
       int[] parent = new int[getSize()];
       Arrays.fill(parent, -1);
       boolean[] isVisited = new boolean[getSize()];
+
       dfs(startVertex, parent, isVisited);
       return parent;
    }
@@ -148,11 +137,13 @@ public class Graph {
       isVisited[v] = true;
       dfsSearchOrder.add(v);
       for (int neighbor: getNeighbors(v)) {
+         // if the neighbor has not been visited, set the current vertex as the parent and recursively call dfs
          if (!isVisited[neighbor]) {
             parent[neighbor] = v;
             dfs(neighbor, parent, isVisited);
          }
-         else if(parent[v] != neighbor) {
+         // if the neighbor has been visited and is not the parent of the current vertex, then there is a cycle
+         else if (parent[v] != neighbor) {
             hasCycles = true;
          }
       }
@@ -160,7 +151,7 @@ public class Graph {
    
    // returns the depth-first search String
    public String getDfsString() {
-      if (dfsSearchOrder.isEmpty()) dfs();
+      dfs();
       String dfsString = "";
       for (int i = 0; i < dfsSearchOrder.size(); i++) {
          if (i != dfsSearchOrder.size() - 1)
@@ -173,7 +164,7 @@ public class Graph {
 
    // returns a list of all the cycles in the graph
    public void findCyclesDFS() {
-      List<List<Integer>> allCycles = new ArrayList<>();
+      allCycles = new ArrayList<>();
       boolean[] isVisited = new boolean[getSize()];
       List<Integer> currentPath = new ArrayList<>();
 
@@ -183,7 +174,6 @@ public class Graph {
          }
       }
       allCycles = removeDuplicateCycles(allCycles);
-      this.allCycles = allCycles;
    }
 
    // depth-first search helper method to find cycles
@@ -240,7 +230,7 @@ public class Graph {
    public List<Integer> getCycle(int index) {
       if (this.hasCycles()) {
          if (allCycles == null) findCyclesDFS();
-         if (index < allCycles.size() && index >= 0)
+         if (index >= 0 && index < allCycles.size())
             return allCycles.get(index);
          else return null;
       }
@@ -249,6 +239,7 @@ public class Graph {
 
    // returns the breadth-first search list of vertices and their parents
    public int[] bfs() {
+      // find the first vertex in the graph
       int startVertex = 0;
       for (int i = 0; i < getSize(); i++) {
          if (vertices.get(i) != null) {
@@ -257,11 +248,14 @@ public class Graph {
          }
       }
       bfsSearchOrder.clear();
+
+      // initialize parent array, isVisited array, and queue
       int[] parent = new int[getSize()];
       Arrays.fill(parent, -1);
       boolean[] isVisited = new boolean[getSize()];
       Queue<Integer> queue = new LinkedList<>();
       queue.offer(startVertex);
+
       bfs(parent, isVisited, queue);
       return parent;
    }
@@ -288,7 +282,7 @@ public class Graph {
 
    // returns the breadth-first search String
    public String getBfsString() {
-      if (bfsSearchOrder.isEmpty()) bfs();
+      bfs();
       // print the bfs search order
       String bfsString = "";
       for (int i = 0; i < bfsSearchOrder.size(); i++) {
@@ -309,11 +303,9 @@ public class Graph {
    // returns the amount of vertices in the graph currently
    public int getCurrentSize() {
       int count = 0;
-      for (Vertex v: vertices) {
+      for (Vertex v: vertices) 
          if (v != null) count++;
-      }
       return count;
-      
    }
 
    // returns the amount of vertices in the graph including null (deleted) vertices
@@ -333,22 +325,19 @@ public class Graph {
 
    // returns the index of the specified vertex object
    public int getIndex(Vertex v) {
-      for (int i = 0; i < vertices.size(); i++) {
-         if (vertices.get(i) == null) continue;
-         if (vertices.get(i).getX() == v.getX() && vertices.get(i).getY() == v.getY()) {
-               return i;
-         }
-      }
-      return -1;
+      return vertices.indexOf(v);
    }
 
    // returns the index of the specified vertex coordinates
    public int getIndex(double x, double y) {
+      // can't get index by creating a new vertex object to compare with the list because
+      // it will increment the count of vertices and generate a new name, too late to fix now
       for (int i = 0; i < vertices.size(); i++) {
          if (vertices.get(i) == null) continue;
-         if (vertices.get(i).getX() == x && vertices.get(i).getY() == y) {
+         
+         // compare the vertex coordinates
+         if (vertices.get(i).getX() == x && vertices.get(i).getY() == y)
                return i;
-         }
       }
       return -1;
    }
@@ -358,6 +347,8 @@ public class Graph {
       List<Integer> result = new ArrayList<>();
       for (Edge e: neighbors.get(index))
          result.add(e.v);
+
+      // return a sorted list of neighbors
       Collections.sort(result);
       return result;
    }

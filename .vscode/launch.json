@@ -10,7 +10,8 @@
             "request": "launch",
             "map": {
                 "*.py": "Python: Current File",
-                "*.java": "Java: Current File"
+                "*.java": "Java: Current File",
+                "*.cpp": "C/C++: Current File",
             }
         },
         {
@@ -28,6 +29,27 @@
             "mainClass": "${file}",
             "console": "integratedTerminal",
             "vmArgs": "--module-path \"C:/Program Files/Java/javafx-sdk-21.0.2/lib\" --add-modules javafx.controls,javafx.fxml"
+        },
+        {
+            "name": "C/C++: Current File",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${fileDirname}\\${fileBasenameNoExtension}.exe",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ],
+            "preLaunchTask": "C/C++: g++.exe build active file",
+            "miDebuggerPath": "C:\\msys64\\ucrt64\\bin\\gdb.exe"
         }
     ]
 }

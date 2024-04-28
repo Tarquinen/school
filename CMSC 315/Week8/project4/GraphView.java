@@ -1,3 +1,12 @@
+/**
+ * Daniel Smolsky
+ * Programming Project 4 - Graphs
+ * April 21, 2024
+ * The GraphView class extends the JavaFX Pane and provides a visual representation of a Graph.
+ * It handles the mouse event handlers for interacting with the vertices and edges of the graph,
+ * and provides methods for drawing and manipulating the graph on the pane.
+ */
+
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Circle;
 import javafx.scene.Node;

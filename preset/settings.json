@@ -1,0 +1,139 @@
+{
+   "redhat.telemetry.enabled": true,
+   "explorer.confirmDragAndDrop": false,
+   "github.copilot.advanced": {},
+   "github.copilot.enable": {
+      "*": false,
+      "plaintext": true,
+      "markdown": false,
+      "scminput": false
+   },
+   "vscode_custom_css.imports": [
+      "file:///c:/Users/danny/.cursor/extensions/brandonkirbyson.vscode-animations-2.0.1/dist/updateHandler.js"
+   ],
+   "editor.inlayHints.enabled": "off",
+   "editor.wordWrap": "off",
+   "diffEditor.wordWrap": "off",
+   "editor.guides.indentation": false,
+   "editor.guides.bracketPairs": false,
+   "debug.terminal.clearBeforeReusing": true,
+   "editor.cursorStyle": "block",
+   "indentRainbow.indicatorStyle": "light",
+   "editor.suggest.insertMode": "replace",
+   "editor.codeActionsOnSave": {
+      "source.addMissingImports": "explicit",
+      "source.fixAll": "explicit",
+      "source.organizeImports": "explicit"
+   },
+   "[python]": {
+      "diffEditor.ignoreTrimWhitespace": false,
+      "editor.formatOnType": true,
+      "editor.wordBasedSuggestions": "off"
+   },
+   "[java]": {
+      "editor.suggest.snippetsPreventQuickSuggestions": false
+   },
+   "vim.timeout": 200,
+   "vim.leader": "<Space>",
+   "vim.insertModeKeyBindings": [
+      {"before": ["k", "j"], "after": ["<Esc>", "l"]}
+   ],
+   "vim.normalModeKeyBindingsNonRecursive": [
+      // NAVIGATION
+      // switch b/w buffers
+      {"before": ["<S-h>"], "commands": [":bprevious"]},
+      {"before": ["<S-l>"], "commands": [":bnext"]},
+      // splits
+      {"before": ["leader", "v"], "commands": [":vsplit"]},
+      {"before": ["leader", "s"], "commands": [":split"]},
+      // panes
+      {"before": ["leader", "h"], "commands": ["workbench.action.focusLeftGroup"]},
+      {"before": ["leader", "j"], "commands": ["workbench.action.focusBelowGroup"]},
+      {"before": ["leader", "k"], "commands": ["workbench.action.focusAboveGroup"]},
+      {"before": ["leader", "l"], "commands": ["workbench.action.focusRightGroup"]},
+      // NICE TO HAVE
+      {"before": ["leader", "w"], "commands": [":w!"]},
+      {"before": ["leader", "q"], "commands": [":q!"]},
+      {"before": ["leader", "x"], "commands": [":x!"]},
+      {"before": ["[", "d"], "commands": ["editor.action.marker.prev"]},
+      {"before": ["]", "d"], "commands": ["editor.action.marker.next"] },
+      {"before": ["<leader>", "c", "a"], "commands": ["editor.action.quickFix"]},
+      {"before": ["leader", "f"], "commands": ["workbench.action.quickOpen"]},
+      // {"before": ["leader", "p"], "commands": ["editor.action.formatDocument"]},
+      {"before": ["g", "h"], "commands": ["editor.action.showDefinitionPreviewHover"]},
+      {"before": ["leader", "c"], "commands": ["editor.action.commentLine"]}
+   ],
+   "vim.visualModeKeyBindings": [
+      // Stay in visual mode while indenting
+      {"before": ["<"], "commands": ["editor.action.outdentLines"]},
+      {"before": [">"], "commands": ["editor.action.indentLines"]},
+      // Move selected lines while staying in visual mode
+      {"before": ["J"], "commands": ["editor.action.moveLinesDownAction"]},
+      {"before": ["K"], "commands": ["editor.action.moveLinesUpAction"]},
+      // toggle comment selection
+      {"before": ["leader", "c"], "commands": ["editor.action.commentLine"]}
+   ],
+   
+   "vim.visualModeKeyBindingsNonRecursive": [],
+   "vim.useSystemClipboard": true,
+   "vim.commandLineModeKeyBindingsNonRecursive": [],
+   "vim.cursorStylePerMode.insert": "line-thin",
+   "vim.cursorStylePerMode.normal": "block",
+   "vim.useCtrlKeys": true,
+   "vim.handleKeys": {
+      "<C-a>": false,
+      "<C-e>": false,
+      "<C-f>": false
+   },
+   // modify the status bar colors based on the vim mode
+   "vim.statusBarColorControl": false,
+   "vim.statusBarColors.normal": ["#8FBCBB", "#434C5E"],
+   "vim.statusBarColors.insert": "#BF616A",
+   "vim.foldfix": true,
+   "vim.hlsearch": true,
+   "vim.highlightedyank.enable": true,
+
+   "indentRainbow.ignoreErrorLanguages": [
+      "markdown"
+   ],
+   "editor.cursorSurroundingLines": 8,
+   "explorer.confirmDelete": false,
+   "cursor.cpp.disabledLanguages": [
+      "markdown",
+      "scminput",
+      "java",
+      "typescriptreact"
+   ],
+   "editor.tabSize": 3,
+   "cursor.chat.smoothStreaming": true,
+   "git.autofetch": true,
+   "indentRainbow.colors": [
+      "rgba(255,255,64,0.07)",
+      "rgba(127,255,127,0.07)",
+      "rgba(255,127,255,0.07)",
+      "rgba(79,236,236,0.07)"
+   ],
+   "indentRainbow.lightIndicatorStyleLineWidth": 3,
+   "git.confirmSync": false,
+   "git.enableSmartCommit": true,
+   "cmake.configureOnOpen": true,
+   "cmake.options.advanced": {
+      "build": {
+            "statusBarVisibility": "inherit",
+            "inheritDefault": "visible"
+      },
+      "launch": {
+            "statusBarVisibility": "inherit",
+            "inheritDefault": "visible"
+      },
+      "debug": {
+            "statusBarVisibility": "inherit",
+            "inheritDefault": "visible"
+      }
+   },
+   "[cpp]": {
+      "editor.wordBasedSuggestions": "off",
+      "editor.suggest.insertMode": "replace",
+      "editor.semanticHighlighting.enabled": true
+   },
+}

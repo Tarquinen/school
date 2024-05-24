@@ -84,7 +84,7 @@ vector<int> mergeSort(const vector<int>& int_list) {
 
 vector<int> bucketSort(const vector<int>& int_list) {
    vector<int> sorted_list = int_list;
-   int max = 0;
+   int max { 0 };
    for (int x: int_list) if (x > max) max = x;
    // cout << max << "\n";
 
@@ -118,7 +118,7 @@ int main() {
    uniform_int_distribution<> dis(0, 1000);
    int random_number;
    vector<int> int_list;
-   int amount_to_generate = 100000;
+   int amount_to_generate = 10000;
 
    for (int i = 0; i < amount_to_generate; i++) {
       random_number = dis(gen);
